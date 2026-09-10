@@ -1,0 +1,49 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Section from '../components/Section.astro';
+import { site } from '../data';
+
+// Page obligatoire en France. Les informations viennent de src/data/site.yaml.
+---
+
+<BaseLayout
+  titre="Mentions légales"
+  description={`Mentions légales du site de ${site.nom}, ${site.metier}.`}
+  noindex
+>
+  <Section titre="Mentions légales">
+    <div class="prose-site max-w-2xl">
+      <h2>Éditeur du site</h2>
+      <p>
+        {site.nom} — {site.metier}
+        <br />
+        {site.contact.adresse}
+        <br />
+        SIRET : {site.contact.siret}
+        <br />
+        Téléphone : {site.contact.telephoneAffiche}
+        <br />
+        E-mail : {site.contact.email}
+      </p>
+
+      <h2>Hébergement</h2>
+      <p>
+        Ce site est hébergé par GitHub Pages — GitHub, Inc., 88 Colin P. Kelly Jr. Street, San
+        Francisco, CA 94107, États-Unis.
+      </p>
+
+      <h2>Propriété intellectuelle</h2>
+      <p>
+        L'ensemble des textes et des photographies présents sur ce site est la propriété de{' '}
+        {site.nom}. Toute reproduction sans autorisation préalable est interdite.
+      </p>
+
+      <h2>Données personnelles</h2>
+      <p>
+        Ce site ne dépose aucun cookie et ne collecte aucune donnée personnelle : il ne comporte ni
+        formulaire, ni outil de mesure d'audience. Les échanges se font uniquement par téléphone ou
+        par e-mail, à votre initiative.
+      </p>
+    </div>
+  </Section>
+</BaseLayout>

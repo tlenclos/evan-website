@@ -1,0 +1,56 @@
+# =============================================================================
+#  LES PRESTATIONS
+#  -----------------------------------------------------------------------------
+#  Cette liste alimente la page « Prestations » et l'aperçu de la page d'accueil.
+#
+#  Pour ajouter une prestation : copiez un bloc entier (du tiret jusqu'à la
+#  dernière ligne indentée), collez-le à la suite et changez les textes.
+#  Le champ « id » doit être unique et sans espaces ni accents.
+#  Pour supprimer une prestation : effacez son bloc complet.
+#
+#  Les champs « tarif » et « details » sont facultatifs.
+# =============================================================================
+
+- id: agencement
+  titre: 'Agencement sur mesure'
+  description: >-
+    Dressings, bibliothèques, meubles sous escalier : chaque pièce est dessinée
+    à partir des dimensions réelles de votre intérieur, puis fabriquée à
+    l'atelier avant d'être posée chez vous.
+  tarif: 'Sur devis' # TODO
+  details:
+    - 'Prise de mesures et plans 3D avant fabrication'
+    - 'Bois massif, contreplaqué ou panneaux plaqués'
+    - 'Pose comprise'
+
+- id: mobilier
+  titre: 'Mobilier bois'
+  description: >-
+    Tables, bureaux, étagères et pièces uniques réalisées à la commande, dans
+    des essences choisies avec vous.
+  tarif: 'À partir de 450 €' # TODO
+  details:
+    - "Choix de l'essence et de la finition"
+    - 'Assemblages traditionnels'
+    - 'Livraison locale possible'
+
+- id: renovation
+  titre: 'Rénovation de menuiseries'
+  description: >-
+    Portes, parquets, escaliers et boiseries anciennes remis en état plutôt que
+    remplacés, dans le respect de l'existant.
+  tarif: 'Sur devis' # TODO
+  details:
+    - 'Diagnostic sur place avant devis'
+    - 'Réparation, ponçage et finitions'
+    - 'Intervention en site occupé'
+
+- id: pose
+  titre: 'Pose et petits travaux'
+  description: >-
+    Pose de parquet, de plinthes, d'étagères ou de portes intérieures, avec le
+    même soin que pour une pièce sur mesure.
+  tarif: 'Devis gratuit' # TODO
+  details:
+    - 'Déplacement dans un rayon de 40 km'
+    - 'Chantier laissé propre'

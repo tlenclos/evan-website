@@ -1,0 +1,83 @@
+---
+import Button from './Button.astro';
+import { site } from '../data';
+
+/**
+ * En-tête du site : logo texte + navigation.
+ * Le contenu du menu vient de src/data/site.yaml (clé « menu »).
+ * Le menu mobile utilise <details> : il fonctionne sans JavaScript.
+ */
+const cheminActuel = Astro.url.pathname;
+
+// « /prestations » et « /prestations/ » doivent être reconnus comme la même page.
+const estActif = (url: string) => {
+  const normaliser = (valeur: string) => (valeur.endsWith('/') ? valeur : `${valeur}/`);
+  return normaliser(cheminActuel) === normaliser(url);
+};
+---
+
+<header class="sticky top-0 z-50 border-b border-ink-200 bg-surface/95 backdrop-blur">
+  <div class="mx-auto flex max-w-5xl items-center justify-between gap-4 px-5 py-4 sm:px-8">
+    <a href="/" class="group shrink-0">
+      <span class="block font-display text-lg leading-tight text-ink-900">{site.nom}</span>
+      <span class="block text-xs text-ink-500">{site.baseline}</span>
+    </a>
+
+    <!-- Navigation sur grand écran -->
+    <nav aria-label="Navigation principale" class="hidden items-center gap-1 md:flex">
+      {site.menu.map((lien) => (
+        <a
+          href={lien.url}
+          aria-current={estActif(lien.url) ? 'page' : undefined}
+          class:list={[
+            'rounded-button px-3 py-2 text-sm font-medium transition-colors',
+            estActif(lien.url)
+              ? 'bg-brand-50 text-brand-700'
+              : 'text-ink-600 hover:bg-ink-50 hover:text-ink-900',
+          ]}
+        >
+          {lien.texte}
+        </a>
+      ))}
+      <Button href={site.ctaPrincipal.url} class="ml-2">
+        {site.ctaPrincipal.texte}
+      </Button>
+    </nav>
+
+    <!-- Navigation sur mobile -->
+    <details class="relative md:hidden">
+      <summary class="flex cursor-pointer items-center gap-2 rounded-button border border-ink-300 px-3 py-2 text-sm font-medium text-ink-800 marker:content-['']">
+        <svg
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          aria-hidden="true"
+        >
+          <path d="M4 7h16M4 12h16M4 17h16"></path>
+        </svg>
+        Menu
+      </summary>
+      <nav
+        aria-label="Navigation principale"
+        class="absolute right-0 mt-2 w-56 rounded-card border border-ink-200 bg-surface p-2 shadow-card"
+      >
+        {site.menu.map((lien) => (
+          <a
+            href={lien.url}
+            aria-current={estActif(lien.url) ? 'page' : undefined}
+            class:list={[
+              'block rounded-button px-3 py-2 text-sm font-medium',
+              estActif(lien.url) ? 'bg-brand-50 text-brand-700' : 'text-ink-700 hover:bg-ink-50',
+            ]}
+          >
+            {lien.texte}
+          </a>
+        ))}
+      </nav>
+    </details>
+  </div>
+</header>

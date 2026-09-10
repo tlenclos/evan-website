@@ -1,0 +1,154 @@
+@import 'tailwindcss';
+
+/* ===========================================================================
+   DESIGN TOKENS — la charte graphique du site.
+   ---------------------------------------------------------------------------
+   C'est LE seul endroit où l'on définit des couleurs, des polices et des
+   arrondis. Changer une valeur ici la change partout sur le site.
+   Aucune couleur ne doit être écrite « en dur » ailleurs dans le projet.
+
+   Le mot-clé `static` garde TOUTES les valeurs dans le CSS publié, y compris
+   celles qui ne sont pas encore utilisées : sans lui, Tailwind les supprime et
+   la page /styleguide affiche des cases vides.
+   =========================================================================== */
+@theme static {
+  /* --- Couleur principale (boutons, liens, accents) : terre cuite chaleureuse */
+  --color-brand-50: #fdf5f0;
+  --color-brand-100: #fae8dc;
+  --color-brand-200: #f4cdb4;
+  --color-brand-300: #eaa982;
+  --color-brand-400: #de7f4f;
+  --color-brand-500: #d1602f;
+  --color-brand-600: #b84a20; /* couleur de référence : contraste AA sur blanc */
+  --color-brand-700: #98391b;
+  --color-brand-800: #7a2f1a;
+  --color-brand-900: #632918;
+
+  /* --- Neutres (textes, bordures, fonds) : gris légèrement chauds */
+  --color-ink-50: #faf9f7;
+  --color-ink-100: #f2efeb;
+  --color-ink-200: #e4dfd8;
+  --color-ink-300: #cbc3b8;
+  --color-ink-400: #a2988a;
+  --color-ink-500: #7d7365;
+  --color-ink-600: #5f564b;
+  --color-ink-700: #4a423a;
+  --color-ink-800: #332e29;
+  --color-ink-900: #1f1c19;
+
+  /* --- Fonds de page */
+  --color-surface: #ffffff;
+  --color-surface-muted: #faf7f2; /* fond crème des sections alternées */
+
+  /* --- Typographie
+     Deux familles suffisent. Les polices système évitent une dépendance
+     externe (Google Fonts) : chargement instantané et aucun cookie tiers. */
+  --font-sans:
+    ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-display: 'Georgia', 'Times New Roman', ui-serif, serif;
+
+  /* --- Arrondis et ombres */
+  --radius-card: 0.75rem;
+  --radius-button: 0.5rem;
+  --shadow-card: 0 1px 2px rgb(31 28 25 / 0.06), 0 8px 24px -12px rgb(31 28 25 / 0.18);
+}
+
+/* ===========================================================================
+   STYLES DE BASE
+   =========================================================================== */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--color-surface);
+    color: var(--color-ink-800);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Contour de focus visible au clavier : indispensable pour l'accessibilité. */
+  :focus-visible {
+    outline: 2px solid var(--color-brand-600);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  /* Respecte le réglage « réduire les animations » du système. */
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+/* ===========================================================================
+   CLASSES UTILITAIRES DU PROJET
+   Raccourcis maison, pour ne pas répéter les mêmes longues listes de classes.
+   =========================================================================== */
+@utility prose-site {
+  /* Mise en forme du texte libre écrit en Markdown dans les fichiers de contenu. */
+  & > * + * {
+    margin-top: 1.1em;
+  }
+
+  & h2 {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    line-height: 1.3;
+    color: var(--color-ink-900);
+    margin-top: 2em;
+  }
+
+  /* Pas de marge au-dessus du premier élément : elle creuserait un blanc
+     disgracieux entre le haut de la section et le début du texte. */
+  & > :first-child {
+    margin-top: 0;
+  }
+
+  & h3 {
+    font-weight: 600;
+    font-size: 1.125rem;
+    color: var(--color-ink-900);
+    margin-top: 1.6em;
+  }
+
+  & p,
+  & li {
+    color: var(--color-ink-700);
+    line-height: 1.7;
+  }
+
+  & ul {
+    list-style: disc;
+    padding-left: 1.25rem;
+  }
+
+  & ol {
+    list-style: decimal;
+    padding-left: 1.25rem;
+  }
+
+  & li + li {
+    margin-top: 0.4em;
+  }
+
+  & a {
+    color: var(--color-brand-700);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  & strong {
+    color: var(--color-ink-900);
+    font-weight: 600;
+  }
+}
