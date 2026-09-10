@@ -3,8 +3,12 @@
 # Se déclenche à chaque modification envoyée sur la branche `main` : le site est
 # reconstruit puis mis en ligne, généralement en une à deux minutes.
 #
-# Réglage à faire une seule fois dans GitHub :
+# RÉGLAGE À FAIRE UNE SEULE FOIS, avant la première publication :
 #   Settings → Pages → Build and deployment → Source = « GitHub Actions »
+#
+# Ce réglage ne peut pas être automatisé : le jeton d'un workflow a le droit de
+# publier sur Pages, mais pas de créer le site Pages, qui relève de
+# l'administration du dépôt.
 
 name: Déploiement du site
 
@@ -40,14 +44,6 @@ jobs:
         with:
           node-version: 22
           cache: npm
-
-      # Active GitHub Pages sur le dépôt s'il ne l'est pas déjà, et le bascule en
-      # mode « GitHub Actions ». Évite d'avoir à le régler à la main dans
-      # Settings → Pages. Sans effet si Pages est déjà activé.
-      - name: Activer GitHub Pages si nécessaire
-        uses: actions/configure-pages@v5
-        with:
-          enablement: true
 
       - name: Installer les dépendances
         run: npm ci
