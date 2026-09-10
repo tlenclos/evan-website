@@ -1,0 +1,75 @@
+---
+import { getEntry, render } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import Section from '../components/Section.astro';
+import { site } from '../data';
+
+// Le texte de cette page se modifie dans src/content/pages/contact.md
+// Les coordonnées se modifient dans src/data/site.yaml
+const page = await getEntry('pages', 'contact');
+if (!page) throw new Error('Le fichier src/content/pages/contact.md est introuvable.');
+const { Content } = await render(page);
+---
+
+<BaseLayout titre={page.data.titre} description={page.data.description}>
+  {page.data.hero && <Hero {...page.data.hero} />}
+
+  <Section>
+    <div class="grid gap-12 md:grid-cols-[1fr_20rem]">
+      <div class="prose-site">
+        <Content />
+      </div>
+
+      <aside class="space-y-8">
+        <div class="rounded-card border border-ink-200 bg-surface-muted p-6">
+          <h2 class="font-display text-xl text-ink-900">Coordonnées</h2>
+          <dl class="mt-4 space-y-4 text-sm">
+            <div>
+              <dt class="font-semibold text-ink-900">Téléphone</dt>
+              <dd class="mt-1">
+                <a
+                  href={`tel:${site.contact.telephone}`}
+                  class="text-brand-700 underline underline-offset-2"
+                >
+                  {site.contact.telephoneAffiche}
+                </a>
+              </dd>
+            </div>
+            <div>
+              <dt class="font-semibold text-ink-900">E-mail</dt>
+              <dd class="mt-1">
+                <a
+                  href={`mailto:${site.contact.email}`}
+                  class="break-all text-brand-700 underline underline-offset-2"
+                >
+                  {site.contact.email}
+                </a>
+              </dd>
+            </div>
+            <div>
+              <dt class="font-semibold text-ink-900">Atelier</dt>
+              <dd class="mt-1 text-ink-600">{site.contact.adresse}</dd>
+            </div>
+            <div>
+              <dt class="font-semibold text-ink-900">Zone d'intervention</dt>
+              <dd class="mt-1 text-ink-600">{site.zone}</dd>
+            </div>
+          </dl>
+        </div>
+
+        <div class="rounded-card border border-ink-200 p-6">
+          <h2 class="font-display text-xl text-ink-900">Horaires</h2>
+          <ul class="mt-4 space-y-2 text-sm">
+            {site.horaires.map((creneau) => (
+              <li class="flex justify-between gap-4 border-b border-ink-200 pb-2 last:border-0">
+                <span class="text-ink-600">{creneau.jour}</span>
+                <span class="font-medium text-ink-900">{creneau.heures}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </Section>
+</BaseLayout>

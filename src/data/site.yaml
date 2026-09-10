@@ -1,0 +1,63 @@
+# =============================================================================
+#  RÉGLAGES GÉNÉRAUX DU SITE
+#  -----------------------------------------------------------------------------
+#  Tout ce qui apparaît sur PLUSIEURS pages se règle ici : le nom, le menu,
+#  les coordonnées, le pied de page.
+#
+#  Comment modifier : changez uniquement le texte entre guillemets, en gardant
+#  les guillemets et l'indentation (les espaces en début de ligne) intacts.
+#  Les lignes commençant par # sont des commentaires, elles ne s'affichent pas.
+#
+#  Les mentions « TODO » signalent les valeurs d'exemple à remplacer.
+# =============================================================================
+
+# --- Identité -----------------------------------------------------------------
+nom: 'Evan Lemoine' # TODO : le nom affiché en haut du site
+metier: 'Menuisier ébéniste' # TODO
+baseline: 'Agencement sur mesure et mobilier bois' # TODO : phrase courte sous le nom
+description: 'Menuisier ébéniste installé à Nantes. Agencement sur mesure, mobilier bois et rénovation de menuiseries intérieures. Devis gratuit.' # TODO : résumé affiché par Google, 150-160 caractères
+zone: 'Nantes et 40 km alentour' # TODO : zone d'intervention
+
+# --- Coordonnées ---------------------------------------------------------------
+contact:
+  email: 'contact@example.fr' # TODO
+  # « telephone » sert au lien cliquable, « telephoneAffiche » à l'affichage.
+  telephone: '+33600000000' # TODO : format international, sans espaces
+  telephoneAffiche: '06 00 00 00 00' # TODO
+  adresse: "12 rue de l'Atelier, 44000 Nantes" # TODO
+  siret: '000 000 000 00000' # TODO : obligatoire sur les mentions légales
+
+# --- Horaires ------------------------------------------------------------------
+# Ajoutez ou supprimez des lignes librement, en gardant le tiret et l'alignement.
+horaires:
+  - jour: 'Lundi – Vendredi'
+    heures: '8h00 – 18h00'
+  - jour: 'Samedi'
+    heures: 'Sur rendez-vous'
+  - jour: 'Dimanche'
+    heures: 'Fermé'
+
+# --- Réseaux sociaux -----------------------------------------------------------
+# Laissez la liste vide (reseaux: []) s'il n'y en a aucun.
+reseaux:
+  - nom: 'Instagram'
+    url: 'https://instagram.com/' # TODO
+
+# --- Menu de navigation --------------------------------------------------------
+# L'ordre des lignes est l'ordre d'affichage dans le menu.
+# Pour ajouter une entrée, il faut aussi créer la page correspondante :
+# la marche à suivre est décrite dans CLAUDE.md.
+menu:
+  - texte: 'Accueil'
+    url: '/'
+  - texte: 'Prestations'
+    url: '/prestations/'
+  - texte: 'À propos'
+    url: '/a-propos/'
+  - texte: 'Contact'
+    url: '/contact/'
+
+# --- Bouton d'appel à l'action (en haut à droite) ------------------------------
+ctaPrincipal:
+  texte: 'Demander un devis'
+  url: '/contact/'

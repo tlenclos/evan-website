@@ -1,0 +1,135 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Section from '../components/Section.astro';
+import Button from '../components/Button.astro';
+import PrestationCard from '../components/PrestationCard.astro';
+
+/**
+ * STYLE GUIDE — l'inventaire visuel du design system.
+ *
+ * Cette page n'est pas dans le menu et n'est pas référencée par Google.
+ * Elle sert à deux choses :
+ *  1. vérifier d'un coup d'œil que la charte reste cohérente après une modification ;
+ *  2. servir de base à l'export vers le projet Claude Design (voir CLAUDE.md).
+ *
+ * Les couleurs sont affichées via `var(--color-…)` : elles restent définies
+ * uniquement dans src/styles/global.css, jamais recopiées ici.
+ */
+const niveaux = ['50', '100', '200', '300', '400', '500', '600', '700', '800', '900'];
+const palettes = [
+  { nom: 'brand — couleur principale', prefixe: 'brand' },
+  { nom: 'ink — neutres (textes, bordures)', prefixe: 'ink' },
+];
+const fonds = [
+  { nom: 'surface', variable: '--color-surface' },
+  { nom: 'surface-muted', variable: '--color-surface-muted' },
+];
+---
+
+<BaseLayout
+  titre="Style guide"
+  description="Inventaire des couleurs, typographies et composants du site."
+  noindex
+>
+  <Section
+    titre="Style guide"
+    chapeau="Les briques visuelles du site. Page technique, non référencée et absente du menu."
+  >
+    <div class="space-y-14">
+      <div>
+        <h3 class="text-sm font-semibold tracking-wide text-ink-500 uppercase">Couleurs</h3>
+        <div class="mt-4 space-y-6">
+          {palettes.map((palette) => (
+            <div>
+              <p class="text-sm font-medium text-ink-700">{palette.nom}</p>
+              <div class="mt-2 grid grid-cols-5 gap-2 sm:grid-cols-10">
+                {niveaux.map((niveau) => (
+                  <div>
+                    <div
+                      class="h-12 rounded border border-ink-200"
+                      style={`background-color: var(--color-${palette.prefixe}-${niveau})`}
+                    />
+                    <p class="mt-1 text-center text-[11px] text-ink-500">{niveau}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+          <div>
+            <p class="text-sm font-medium text-ink-700">fonds de page</p>
+            <div class="mt-2 grid grid-cols-2 gap-2 sm:grid-cols-4">
+              {fonds.map((fond) => (
+                <div>
+                  <div
+                    class="h-12 rounded border border-ink-200"
+                    style={`background-color: var(${fond.variable})`}
+                  />
+                  <p class="mt-1 text-center text-[11px] text-ink-500">{fond.nom}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <h3 class="text-sm font-semibold tracking-wide text-ink-500 uppercase">Typographie</h3>
+        <div class="mt-4 space-y-3">
+          <p class="font-display text-4xl text-ink-900">Titre de page — font-display</p>
+          <p class="font-display text-3xl text-ink-900">Titre de section — font-display</p>
+          <p class="font-display text-xl text-ink-900">Titre de carte — font-display</p>
+          <p class="max-w-2xl text-lg text-ink-600">
+            Chapeau introductif — texte courant en font-sans, taille lg, couleur ink-600.
+          </p>
+          <p class="max-w-2xl text-ink-700">
+            Paragraphe courant — font-sans, couleur ink-700. Le corps de texte des pages est mis en
+            forme par la classe maison <code class="rounded bg-ink-100 px-1">prose-site</code>.
+          </p>
+          <p class="text-sm font-semibold tracking-wide text-brand-700 uppercase">
+            Sur-titre — brand-700, majuscules
+          </p>
+        </div>
+      </div>
+
+      <div>
+        <h3 class="text-sm font-semibold tracking-wide text-ink-500 uppercase">Boutons</h3>
+        <div class="mt-4 flex flex-wrap gap-3">
+          <Button href="#">Bouton principal</Button>
+          <Button href="#" variante="secondaire">
+            Bouton secondaire
+          </Button>
+        </div>
+      </div>
+
+      <div>
+        <h3 class="text-sm font-semibold tracking-wide text-ink-500 uppercase">Carte prestation</h3>
+        <div class="mt-4 grid gap-6 sm:grid-cols-2">
+          <PrestationCard
+            titre="Avec tarif et détails"
+            description="Exemple de carte complète telle qu'elle apparaît sur la page Prestations."
+            tarif="À partir de 450 €"
+            details={['Premier point de détail', 'Deuxième point de détail']}
+          />
+          <PrestationCard
+            titre="Version courte"
+            description="Sans tarif ni détails : la variante utilisée sur la page d'accueil."
+          />
+        </div>
+      </div>
+
+      <div>
+        <h3 class="text-sm font-semibold tracking-wide text-ink-500 uppercase">
+          Arrondis et ombres
+        </h3>
+        <div class="mt-4 flex flex-wrap gap-4">
+          <div class="flex h-24 w-40 items-center justify-center rounded-card border border-ink-200 bg-surface text-xs text-ink-500 shadow-card">
+            radius-card + shadow-card
+          </div>
+          <div class="flex h-24 w-40 items-center justify-center rounded-button border border-ink-200 text-xs text-ink-500">
+            radius-button
+          </div>
+        </div>
+      </div>
+    </div>
+  </Section>
+</BaseLayout>

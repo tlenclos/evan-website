@@ -1,0 +1,36 @@
+{
+  "name": "evan-website",
+  "version": "1.0.0",
+  "description": "Site vitrine statique — Astro + Tailwind, déployé sur GitHub Pages.",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "format": "prettier --write ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tlenclos/evan-website.git"
+  },
+  "bugs": {
+    "url": "https://github.com/tlenclos/evan-website/issues"
+  },
+  "homepage": "https://github.com/tlenclos/evan-website#readme",
+  "dependencies": {
+    "@astrojs/sitemap": "^3.7.4",
+    "@tailwindcss/vite": "^4.3.3",
+    "astro": "^7.3.2",
+    "js-yaml": "^5.4.1",
+    "tailwindcss": "^4.3.3"
+  },
+  "private": true,
+  "type": "module",
+  "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "prettier": "^3.9.6",
+    "prettier-plugin-astro": "^1.0.0",
+    "prettier-plugin-tailwindcss": "^0.8.1",
+    "typescript": "^6.0.3"
+  }
+}

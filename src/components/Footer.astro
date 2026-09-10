@@ -1,0 +1,74 @@
+---
+import { site } from '../data';
+
+const annee = new Date().getFullYear();
+---
+
+<footer class="border-t border-ink-200 bg-ink-900 text-ink-200">
+  <div class="mx-auto grid max-w-5xl gap-10 px-5 py-14 sm:px-8 md:grid-cols-3">
+    <div>
+      <p class="font-display text-lg text-white">{site.nom}</p>
+      <p class="mt-1 text-sm text-ink-400">{site.metier}</p>
+      <p class="mt-4 text-sm leading-relaxed text-ink-300">{site.zone}</p>
+    </div>
+
+    <div>
+      <h2 class="text-sm font-semibold tracking-wide text-white uppercase">Contact</h2>
+      <ul class="mt-4 space-y-2 text-sm">
+        <li>
+          <a href={`tel:${site.contact.telephone}`} class="hover:text-white hover:underline">
+            {site.contact.telephoneAffiche}
+          </a>
+        </li>
+        <li>
+          <a
+            href={`mailto:${site.contact.email}`}
+            class="break-all hover:text-white hover:underline"
+          >
+            {site.contact.email}
+          </a>
+        </li>
+        <li class="text-ink-300">{site.contact.adresse}</li>
+      </ul>
+      {site.reseaux.length > 0 && (
+        <ul class="mt-4 flex gap-4 text-sm">
+          {site.reseaux.map((reseau) => (
+            <li>
+              <a
+                href={reseau.url}
+                rel="noopener noreferrer"
+                target="_blank"
+                class="hover:text-white hover:underline"
+              >
+                {reseau.nom}
+              </a>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+
+    <div>
+      <h2 class="text-sm font-semibold tracking-wide text-white uppercase">Horaires</h2>
+      <ul class="mt-4 space-y-2 text-sm">
+        {site.horaires.map((creneau) => (
+          <li class="flex justify-between gap-4 border-b border-ink-800 pb-2">
+            <span class="text-ink-300">{creneau.jour}</span>
+            <span>{creneau.heures}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+
+  <div class="border-t border-ink-800">
+    <div class="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-2 px-5 py-5 text-xs text-ink-400 sm:px-8">
+      <p>
+        © {annee} {site.nom} — SIRET {site.contact.siret}
+      </p>
+      <a href="/mentions-legales/" class="hover:text-white hover:underline">
+        Mentions légales
+      </a>
+    </div>
+  </div>
+</footer>

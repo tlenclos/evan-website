@@ -1,0 +1,41 @@
+---
+import { getEntry, render } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import Section from '../components/Section.astro';
+import Button from '../components/Button.astro';
+import PrestationCard from '../components/PrestationCard.astro';
+import { prestations } from '../data';
+
+// Le texte de cette page se modifie dans src/content/pages/prestations.md
+// La liste des prestations se modifie dans src/data/prestations.yaml
+const page = await getEntry('pages', 'prestations');
+if (!page) throw new Error('Le fichier src/content/pages/prestations.md est introuvable.');
+const { Content } = await render(page);
+---
+
+<BaseLayout titre={page.data.titre} description={page.data.description}>
+  {page.data.hero && <Hero {...page.data.hero} />}
+
+  <Section>
+    <div class="grid gap-6 sm:grid-cols-2">
+      {prestations.map((prestation) => (
+        <PrestationCard
+          titre={prestation.titre}
+          description={prestation.description}
+          tarif={prestation.tarif}
+          details={prestation.details}
+        />
+      ))}
+    </div>
+  </Section>
+
+  <Section fond="creme">
+    <div class="prose-site max-w-2xl">
+      <Content />
+    </div>
+    <div class="mt-10">
+      <Button href="/contact/">Demander un devis gratuit</Button>
+    </div>
+  </Section>
+</BaseLayout>

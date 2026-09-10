@@ -1,0 +1,78 @@
+---
+import { getEntry, render } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import Section from '../components/Section.astro';
+import Button from '../components/Button.astro';
+import PrestationCard from '../components/PrestationCard.astro';
+import { site, prestations, temoignages } from '../data';
+
+// Le texte de cette page se modifie dans src/content/pages/accueil.md
+const page = await getEntry('pages', 'accueil');
+if (!page) throw new Error('Le fichier src/content/pages/accueil.md est introuvable.');
+const { Content } = await render(page);
+---
+
+<BaseLayout titre={page.data.titre} description={page.data.description}>
+  {page.data.hero && <Hero {...page.data.hero} />}
+
+  <Section>
+    <div class="prose-site max-w-2xl">
+      <Content />
+    </div>
+  </Section>
+
+  <Section
+    fond="creme"
+    titre="Les prestations"
+    chapeau="Quatre familles d'intervention, du meuble unique au chantier d'agencement complet."
+  >
+    <div class="grid gap-6 sm:grid-cols-2">
+      {prestations.map((prestation) => (
+        <PrestationCard
+          titre={prestation.titre}
+          description={prestation.description}
+          tarif={prestation.tarif}
+        />
+      ))}
+    </div>
+    <div class="mt-10">
+      <Button href="/prestations/" variante="secondaire">
+        Voir le détail des prestations
+      </Button>
+    </div>
+  </Section>
+
+  {temoignages.length > 0 && (
+    <Section titre="Ce qu'en disent les clients">
+      <div class="grid gap-6 md:grid-cols-3">
+        {temoignages.map((temoignage) => (
+          <figure class="rounded-card border border-ink-200 bg-surface p-6">
+            <blockquote class="leading-relaxed text-ink-700">« {temoignage.texte} »</blockquote>
+            <figcaption class="mt-4 text-sm font-semibold text-ink-900">
+              {temoignage.auteur}
+              {temoignage.lieu && (
+                <span class="font-normal text-ink-500"> — {temoignage.lieu}</span>
+              )}
+            </figcaption>
+          </figure>
+        ))}
+      </div>
+    </Section>
+  )}
+
+  <Section fond="creme">
+    <div class="rounded-card bg-ink-900 px-6 py-12 text-center sm:px-12">
+      <h2 class="font-display text-3xl text-white">Un projet en tête ?</h2>
+      <p class="mx-auto mt-4 max-w-xl leading-relaxed text-ink-300">
+        Visite et devis gratuits — {site.zone}. Réponse sous 48 heures.
+      </p>
+      <div class="mt-8 flex flex-wrap justify-center gap-3">
+        <Button href="/contact/">{site.ctaPrincipal.texte}</Button>
+        <Button href={`tel:${site.contact.telephone}`} variante="secondaire">
+          {site.contact.telephoneAffiche}
+        </Button>
+      </div>
+    </div>
+  </Section>
+</BaseLayout>

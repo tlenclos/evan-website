@@ -1,0 +1,34 @@
+---
+/**
+ * Bloc de page : gère la largeur maximale, les marges et le fond.
+ * Toutes les sections du site passent par ce composant pour rester alignées.
+ */
+interface Props {
+  titre?: string;
+  chapeau?: string;
+  fond?: 'blanc' | 'creme';
+  id?: string;
+  class?: string;
+}
+
+const { titre, chapeau, fond = 'blanc', id, class: classeSupplementaire = '' } = Astro.props;
+
+const fonds = {
+  blanc: 'bg-surface',
+  creme: 'bg-surface-muted',
+};
+---
+
+<section id={id} class={`${fonds[fond]} ${classeSupplementaire}`}>
+  <div class="mx-auto max-w-5xl px-5 py-16 sm:px-8 sm:py-20">
+    {(titre || chapeau) && (
+      <header class="mb-10 max-w-2xl">
+        {titre && (
+          <h2 class="font-display text-3xl leading-tight text-ink-900 sm:text-4xl">{titre}</h2>
+        )}
+        {chapeau && <p class="mt-4 text-lg leading-relaxed text-ink-600">{chapeau}</p>}
+      </header>
+    )}
+    <slot />
+  </div>
+</section>

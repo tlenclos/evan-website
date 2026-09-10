@@ -1,0 +1,25 @@
+---
+/**
+ * Bouton / lien d'action.
+ * Utilisé partout pour les appels à l'action : les styles ne sont définis qu'ici.
+ */
+interface Props {
+  href: string;
+  variante?: 'principal' | 'secondaire';
+  class?: string;
+}
+
+const { href, variante = 'principal', class: classeSupplementaire = '' } = Astro.props;
+
+const base =
+  'inline-flex items-center justify-center gap-2 rounded-button px-5 py-3 text-sm font-semibold transition-colors';
+
+const variantes = {
+  principal: 'bg-brand-600 text-white hover:bg-brand-700',
+  secondaire: 'border border-ink-300 bg-white text-ink-800 hover:border-ink-400 hover:bg-ink-50',
+};
+---
+
+<a href={href} class={`${base} ${variantes[variante]} ${classeSupplementaire}`}>
+  <slot />
+</a>

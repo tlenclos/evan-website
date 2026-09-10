@@ -1,0 +1,15 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Section from '../components/Section.astro';
+import Button from '../components/Button.astro';
+---
+
+<BaseLayout
+  titre="Page introuvable"
+  description="Cette page n'existe pas ou a été déplacée."
+  noindex
+>
+  <Section titre="Cette page n'existe pas" chapeau="Le lien est peut-être ancien ou mal recopié.">
+    <Button href="/">Retour à l'accueil</Button>
+  </Section>
+</BaseLayout>

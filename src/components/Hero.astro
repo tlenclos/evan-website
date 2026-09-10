@@ -1,0 +1,34 @@
+---
+import Button from './Button.astro';
+import { site } from '../data';
+
+/** Grand bandeau en haut de chaque page. Son contenu vient du fichier Markdown de la page. */
+interface Props {
+  titre: string;
+  texte: string;
+  ctaTexte?: string;
+  ctaUrl?: string;
+}
+
+const { titre, texte, ctaTexte, ctaUrl } = Astro.props;
+---
+
+<div class="border-b border-ink-200 bg-surface-muted">
+  <div class="mx-auto max-w-5xl px-5 py-16 sm:px-8 sm:py-24">
+    <p class="text-sm font-semibold tracking-wide text-brand-700 uppercase">
+      {site.metier} · {site.zone}
+    </p>
+    <h1 class="mt-4 max-w-3xl font-display text-4xl leading-tight text-ink-900 sm:text-5xl">
+      {titre}
+    </h1>
+    <p class="mt-6 max-w-2xl text-lg leading-relaxed text-ink-600">{texte}</p>
+    {ctaTexte && ctaUrl && (
+      <div class="mt-8 flex flex-wrap gap-3">
+        <Button href={ctaUrl}>{ctaTexte}</Button>
+        <Button href={`tel:${site.contact.telephone}`} variante="secondaire">
+          {site.contact.telephoneAffiche}
+        </Button>
+      </div>
+    )}
+  </div>
+</div>
