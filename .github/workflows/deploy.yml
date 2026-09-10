@@ -41,6 +41,14 @@ jobs:
           node-version: 22
           cache: npm
 
+      # Active GitHub Pages sur le dépôt s'il ne l'est pas déjà, et le bascule en
+      # mode « GitHub Actions ». Évite d'avoir à le régler à la main dans
+      # Settings → Pages. Sans effet si Pages est déjà activé.
+      - name: Activer GitHub Pages si nécessaire
+        uses: actions/configure-pages@v5
+        with:
+          enablement: true
+
       - name: Installer les dépendances
         run: npm ci
 
