@@ -109,40 +109,53 @@ document.documentElement.scrollWidth - document.documentElement.clientWidth; // 
 ## Publication
 
 Le site est déployé par **Coolify**, sur un serveur OVH. Tout envoi sur `main`
-déclenche une reconstruction et une mise en ligne, en une à deux minutes.
+déclenche une reconstruction et une mise en ligne.
 
-Il n'y a **rien à maintenir dans le dépôt** pour le déploiement : la
-configuration vit dans l'interface Coolify. Elle est reproduite ici pour qu'elle
-ne soit pas invisible depuis le code.
+Le déploiement est décrit **dans le dépôt**, par deux fichiers :
 
-| Champ             | Valeur          |
-| ----------------- | --------------- |
-| Build Pack        | `Static`        |
-| Base Directory    | `/`             |
-| Install Command   | `npm ci`        |
-| Build Command     | `npm run build` |
-| Publish Directory | `dist`          |
-| Ports Exposes     | `80`            |
-| Branch            | `main`          |
+- `Dockerfile` — construction en deux étapes : `npm ci`, `npm run check`,
+  `npm run build` avec Node 22, puis copie de `dist/` dans une image nginx.
+  L'image finale ne contient ni Node, ni `node_modules`, ni code source.
+- `nginx.conf` — comment les pages sont servies : adressage des dossiers
+  (`dist/contact/index.html`), page 404, durées de cache, compression.
 
-Variable d'environnement à conserver : `NIXPACKS_NODE_VERSION=22`. Le build pack
-Static s'appuie sur Nixpacks pour l'étape de construction.
+Il ne reste que trois champs à régler dans l'interface Coolify :
 
-**Deux pièges déjà rencontrés**, à ne pas réintroduire :
+| Champ          | Valeur       |
+| -------------- | ------------ |
+| Build Pack     | `Dockerfile` |
+| Base Directory | `/`          |
+| Ports Exposes  | `80`         |
+
+**Trois pièges déjà rencontrés**, à ne pas réintroduire :
 
 - _Base Directory_ réglée sur `/dist` : le dossier de build est dans
   `.gitignore`, il n'existe pas dans le code importé. La construction échoue sur
   « Nixpacks failed to detect the application type ».
-- Build pack `Nixpacks` au lieu de `Static` : Nixpacks cherche à démarrer un
-  serveur, or il n'y a pas de script `start` et un site statique n'a rien à
-  démarrer.
+- Build pack `Nixpacks` : il cherche à démarrer un serveur, or il n'y a pas de
+  script `start` et un site statique n'a rien à démarrer.
+- Build pack `Static` : il ne permet pas de lancer une commande de build. Il
+  faudrait committer `dist/`, ce que l'on ne veut pas.
 
 `llms.txt` et `llms-full.txt`, à la racine, documentent le CLI Coolify — à
 consulter pour toute intervention sur le déploiement.
 
-**Pas de vérification automatique avant déploiement.** Si un fichier de contenu
-est mal rempli, c'est la construction Coolify qui échoue et la version
-précédente reste en ligne : le garde-fou des schémas joue toujours son rôle.
+**Le contenu est validé avant la mise en ligne.** Le `Dockerfile` lance
+`npm run check` avant de construire : une erreur de saisie dans un `.yaml` ou un
+`.md` arrête la construction de l'image, et la version précédente du site reste
+en ligne.
+
+### Tester la configuration nginx sans Docker
+
+Le démon Docker n'est pas disponible dans les sessions Claude Code distantes.
+Pour vérifier `nginx.conf` malgré tout : `npm run build`, puis lancer nginx sur
+un port libre avec ce fichier, en remplaçant `listen 80` et la directive `root`
+par le chemin de `dist/`. Ajouter `user root;` dans la configuration de test si
+les fichiers sont hors du répertoire du projet, sinon nginx renvoie des 404 par
+manque de droits. Contrôler alors : les pages répondent en 200, une URL
+inconnue renvoie bien un code 404 **et** la page 404 du site, et
+`/contact` redirige vers `/contact/` par un `Location` **relatif** — le
+conteneur est derrière le proxy de Coolify.
 
 ---
 
