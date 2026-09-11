@@ -51,9 +51,9 @@ Chacun de ces fichiers commence par des explications en commentaire. Les mention
 5. Attendez une à deux minutes, puis rechargez le site.
 
 **Si vous vous trompez**, le site en ligne n'est jamais cassé : la publication
-s'arrête et l'ancienne version reste affichée. Un point rouge apparaît dans
-l'onglet _Actions_ de GitHub, et le message d'erreur indique quel fichier et
-quelle ligne posent problème.
+s'arrête et l'ancienne version reste affichée. Le déploiement apparaît en échec
+dans Coolify, et le message d'erreur indique quel fichier et quel champ posent
+problème.
 
 ---
 
