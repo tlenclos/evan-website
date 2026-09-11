@@ -1,7 +1,7 @@
 # Consignes de développement
 
-Site vitrine statique. Astro 7 + Tailwind v4, sortie 100 % statique, publié sur
-GitHub Pages à l'adresse `https://evan-website.thibaultlenclos.fr`.
+Site vitrine statique. Astro 7 + Tailwind v4, sortie 100 % statique, déployée par
+Coolify à l'adresse `https://evan-website.thibaultlenclos.fr`.
 
 **Objectif du projet : une personne non technique doit pouvoir demander une
 modification en une phrase.** Toutes les règles ci-dessous en découlent.
@@ -108,9 +108,41 @@ document.documentElement.scrollWidth - document.documentElement.clientWidth; // 
 
 ## Publication
 
-`.github/workflows/deploy.yml` construit et publie à chaque envoi sur `main`.
-Le fichier `public/CNAME` fixe le nom de domaine : ne pas le supprimer, il est
-recopié tel quel dans `dist/` à chaque construction.
+Le site est déployé par **Coolify**, sur un serveur OVH. Tout envoi sur `main`
+déclenche une reconstruction et une mise en ligne, en une à deux minutes.
+
+Il n'y a **rien à maintenir dans le dépôt** pour le déploiement : la
+configuration vit dans l'interface Coolify. Elle est reproduite ici pour qu'elle
+ne soit pas invisible depuis le code.
+
+| Champ             | Valeur          |
+| ----------------- | --------------- |
+| Build Pack        | `Static`        |
+| Base Directory    | `/`             |
+| Install Command   | `npm ci`        |
+| Build Command     | `npm run build` |
+| Publish Directory | `dist`          |
+| Ports Exposes     | `80`            |
+| Branch            | `main`          |
+
+Variable d'environnement à conserver : `NIXPACKS_NODE_VERSION=22`. Le build pack
+Static s'appuie sur Nixpacks pour l'étape de construction.
+
+**Deux pièges déjà rencontrés**, à ne pas réintroduire :
+
+- _Base Directory_ réglée sur `/dist` : le dossier de build est dans
+  `.gitignore`, il n'existe pas dans le code importé. La construction échoue sur
+  « Nixpacks failed to detect the application type ».
+- Build pack `Nixpacks` au lieu de `Static` : Nixpacks cherche à démarrer un
+  serveur, or il n'y a pas de script `start` et un site statique n'a rien à
+  démarrer.
+
+`llms.txt` et `llms-full.txt`, à la racine, documentent le CLI Coolify — à
+consulter pour toute intervention sur le déploiement.
+
+**Pas de vérification automatique avant déploiement.** Si un fichier de contenu
+est mal rempli, c'est la construction Coolify qui échoue et la version
+précédente reste en ligne : le garde-fou des schémas joue toujours son rôle.
 
 ---
 
