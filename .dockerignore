@@ -1,0 +1,12 @@
+# Ce qui n'a pas à entrer dans le contexte de construction Docker.
+# `node_modules` et `dist` sont reconstruits dans l'image ; les copier depuis la
+# machine locale ralentirait la construction et risquerait d'y introduire des
+# fichiers périmés.
+node_modules
+dist
+.astro
+.git
+.github
+*.log
+.env
+.DS_Store
