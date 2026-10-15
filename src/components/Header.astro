@@ -3,8 +3,8 @@ import Button from './Button.astro';
 import { site } from '../data';
 
 /**
- * En-tête du site : logo texte + navigation.
- * Le contenu du menu vient de src/data/site.yaml (clé « menu »).
+ * En-tête du site : logo + navigation.
+ * Le logo et le menu se règlent dans src/data/site.yaml (clés « logo » et « menu »).
  * Le menu mobile utilise <details> : il fonctionne sans JavaScript.
  */
 const cheminActuel = Astro.url.pathname;
@@ -17,66 +17,72 @@ const estActif = (url: string) => {
 ---
 
 <header class="sticky top-0 z-50 border-b border-ink-200 bg-surface/95 backdrop-blur">
-  <div class="mx-auto flex max-w-5xl items-center justify-between gap-4 px-5 py-4 sm:px-8">
-    <a href="/" class="group shrink-0">
-      <span class="block font-display text-lg leading-tight text-ink-900">{site.nom}</span>
-      <span class="block text-xs text-ink-500">{site.baseline}</span>
+  <div class="mx-auto flex max-w-6xl items-center justify-between gap-6 px-4 py-2.5 sm:px-10 sm:py-3.5">
+    <a href="/" class="shrink-0">
+      <img src={site.logo} alt={site.nom} width="205" height="320" class="h-13 w-auto sm:h-16" />
     </a>
 
     <!-- Navigation sur grand écran -->
-    <nav aria-label="Navigation principale" class="hidden items-center gap-1 md:flex">
+    <nav aria-label="Navigation principale" class="hidden items-center gap-8 lg:flex">
       {site.menu.map((lien) => (
         <a
           href={lien.url}
           aria-current={estActif(lien.url) ? 'page' : undefined}
           class:list={[
-            'rounded-button px-3 py-2 text-sm font-medium transition-colors',
-            estActif(lien.url)
-              ? 'bg-brand-50 text-brand-700'
-              : 'text-ink-600 hover:bg-ink-50 hover:text-ink-900',
+            'text-base transition-colors',
+            estActif(lien.url) ? 'font-medium text-brand-600' : 'text-ink-900 hover:text-brand-600',
           ]}
         >
           {lien.texte}
         </a>
       ))}
-      <Button href={site.ctaPrincipal.url} class="ml-2">
+    </nav>
+    <div class="hidden lg:block">
+      <Button href={site.ctaPrincipal.url} compact>
         {site.ctaPrincipal.texte}
       </Button>
-    </nav>
+    </div>
 
-    <!-- Navigation sur mobile -->
-    <details class="relative md:hidden">
-      <summary class="flex cursor-pointer items-center gap-2 rounded-button border border-ink-300 px-3 py-2 text-sm font-medium text-ink-800 marker:content-['']">
+    <!-- Navigation sur mobile et tablette -->
+    <details class="relative lg:hidden">
+      <summary
+        aria-label="Menu"
+        class="flex size-12 cursor-pointer items-center justify-center rounded-button border-2 border-ink-300 text-ink-700 marker:content-['']"
+      >
         <svg
-          width="18"
-          height="18"
+          width="22"
+          height="22"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
-          stroke-width="2"
+          stroke-width="1.8"
           stroke-linecap="round"
           aria-hidden="true"
         >
-          <path d="M4 7h16M4 12h16M4 17h16"></path>
+          <path d="M4 7h16M4 12h16M4 17h10"></path>
         </svg>
-        Menu
       </summary>
       <nav
         aria-label="Navigation principale"
-        class="absolute right-0 mt-2 w-56 rounded-card border border-ink-200 bg-surface p-2 shadow-card"
+        class="absolute right-0 mt-2 w-60 rounded-card border border-ink-200 bg-surface p-2 shadow-card"
       >
         {site.menu.map((lien) => (
           <a
             href={lien.url}
             aria-current={estActif(lien.url) ? 'page' : undefined}
             class:list={[
-              'block rounded-button px-3 py-2 text-sm font-medium',
-              estActif(lien.url) ? 'bg-brand-50 text-brand-700' : 'text-ink-700 hover:bg-ink-50',
+              'block rounded-button px-4 py-2.5 text-base',
+              estActif(lien.url)
+                ? 'bg-brand-50 font-medium text-brand-700'
+                : 'text-ink-800 hover:bg-ink-100',
             ]}
           >
             {lien.texte}
           </a>
         ))}
+        <Button href={site.ctaPrincipal.url} class="mt-2 w-full">
+          {site.ctaPrincipal.texte}
+        </Button>
       </nav>
     </details>
   </div>

@@ -24,17 +24,19 @@ Deux façons de faire une modification :
 
 ## Où se trouve quoi
 
-| Ce que vous voulez changer                              | Le fichier à ouvrir                |
-| ------------------------------------------------------- | ---------------------------------- |
-| Nom, métier, téléphone, e-mail, adresse, horaires, menu | `src/data/site.yaml`               |
-| La liste des prestations et leurs tarifs                | `src/data/prestations.yaml`        |
-| Les avis clients de la page d'accueil                   | `src/data/temoignages.yaml`        |
-| Le texte de la page d'accueil                           | `src/content/pages/accueil.md`     |
-| Le texte de la page Prestations                         | `src/content/pages/prestations.md` |
-| Le texte de la page À propos                            | `src/content/pages/a-propos.md`    |
-| Le texte de la page Contact                             | `src/content/pages/contact.md`     |
-| Les photos                                              | dossier `public/images/`           |
-| Les couleurs et les polices                             | `src/styles/global.css`            |
+| Ce que vous voulez changer                              | Le fichier à ouvrir                 |
+| ------------------------------------------------------- | ----------------------------------- |
+| Nom, métier, téléphone, e-mail, adresse, horaires, menu | `src/data/site.yaml`                |
+| La liste des prestations et leurs tarifs                | `src/data/prestations.yaml`         |
+| Les avis clients de la page d'accueil                   | `src/data/temoignages.yaml`         |
+| Les photos de chantiers et leurs légendes               | `src/data/realisations.yaml`        |
+| Le texte de la page d'accueil                           | `src/content/pages/accueil.md`      |
+| Le texte de la page Prestations                         | `src/content/pages/prestations.md`  |
+| Le texte de la page À propos                            | `src/content/pages/a-propos.md`     |
+| Le texte de la page Contact                             | `src/content/pages/contact.md`      |
+| Le texte de la page Réalisations                        | `src/content/pages/realisations.md` |
+| Les fichiers photo et le logo                           | dossier `public/images/`            |
+| Les couleurs et les polices                             | `src/styles/global.css`             |
 
 Chacun de ces fichiers commence par des explications en commentaire. Les mentions
 **`TODO`** signalent les valeurs d'exemple qui restent à remplacer par les vraies.
@@ -61,9 +63,11 @@ problème.
 
 1. Ouvrez le dossier `public/images/` sur github.com.
 2. **Add file → Upload files**, puis déposez votre photo.
-3. Nommez-la sans accent ni espace, par exemple `atelier-nantes.jpg`, et
-   redimensionnez-la à 1600 pixels de large maximum avant de l'envoyer.
-4. Demandez ensuite où la faire apparaître sur le site.
+3. Nommez-la sans accent ni espace, par exemple `terrasse-angouleme.jpg`, et
+   redimensionnez-la à 1600 pixels maximum avant de l'envoyer.
+4. Demandez ensuite où la faire apparaître sur le site. Pour une photo de
+   chantier : déposez-la dans `public/images/realisations/` et ajoutez un bloc
+   dans `src/data/realisations.yaml`.
 
 ---
 

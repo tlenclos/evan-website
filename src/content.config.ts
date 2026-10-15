@@ -1,6 +1,7 @@
 import { defineCollection } from 'astro:content';
 import { z } from 'astro/zod';
 import { glob } from 'astro/loaders';
+import { schemaNomPhoto } from './data';
 
 /**
  * Déclaration du contenu rédactionnel du site.
@@ -10,8 +11,10 @@ import { glob } from 'astro/loaders';
  * champ manquant ou mal orthographié fait échouer la construction avec un
  * message clair, plutôt que de publier une page sans titre.
  *
- * Les listes (prestations, avis clients) ne sont pas ici mais dans `src/data/`,
- * afin que l'ordre d'écriture dans le fichier soit l'ordre d'affichage.
+ * Les listes (prestations, avis clients, photos) ne sont pas ici mais dans
+ * `src/data/`, afin que l'ordre d'écriture dans le fichier soit l'ordre d'affichage.
+ *
+ * Les photos se désignent par leur nom de fichier dans public/images/realisations/.
  */
 const pages = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/pages' }),
@@ -21,10 +24,40 @@ const pages = defineCollection({
     description: z.string(),
     hero: z
       .object({
+        surtitre: z.string().optional(),
         titre: z.string(),
         texte: z.string(),
         ctaTexte: z.string().optional(),
         ctaUrl: z.string().optional(),
+        photo: schemaNomPhoto.optional(),
+        photoSecondaire: schemaNomPhoto.optional(),
+        legendePhoto: z.string().optional(),
+      })
+      .optional(),
+    // Grand bandeau taupe d'appel au devis, en bas de page.
+    appel: z
+      .object({
+        titre: z.string(),
+        texte: z.string().optional(),
+        photo: schemaNomPhoto.optional(),
+      })
+      .optional(),
+    // Blocs propres à la page d'accueil.
+    savoirFaire: z.object({ surtitre: z.string(), titre: z.string(), lien: z.string() }).optional(),
+    chantierUne: z
+      .object({
+        surtitre: z.string(),
+        titre: z.string(),
+        texte: z.string(),
+        photo: schemaNomPhoto,
+        etapes: z.array(z.object({ photo: schemaNomPhoto, legende: z.string() })),
+        bouton: z.string(),
+      })
+      .optional(),
+    etapes: z
+      .object({
+        titre: z.string(),
+        liste: z.array(z.object({ titre: z.string(), texte: z.string() })).min(1),
       })
       .optional(),
   }),

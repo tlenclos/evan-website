@@ -1,0 +1,115 @@
+# =============================================================================
+#  LES RÉALISATIONS (photos de chantiers)
+#  -----------------------------------------------------------------------------
+#  Cette liste alimente la page « Réalisations » et la mosaïque de l'accueil.
+#  Sur la page Réalisations, les photos sont rangées par catégorie, dans l'ordre
+#  de ce fichier.
+#
+#  Pour ajouter une photo :
+#    1. déposez-la dans public/images/realisations/ (nom sans accent ni espace,
+#       1600 pixels maximum sur le plus grand côté) ;
+#    2. copiez un bloc ci-dessous et changez « fichier », « legende » et
+#       « categorie » (l'un des « id » de la liste des catégories).
+#
+#  « etiquette » (facultatif) affiche une pastille sur la photo, ex. 'Avant'.
+#
+#  « accueil » (facultatif) place la photo dans la mosaïque de la page
+#  d'accueil, à la place indiquée :
+#    1 = grande photo en arche à gauche, 2 = large en haut au milieu,
+#    3 = haute à droite, 4 et 5 = petites en bas au milieu.
+# =============================================================================
+
+# --- Bloc « Réalisations » de la page d'accueil ------------------------------
+apercuAccueil:
+  surtitre: 'Réalisations'
+  titre: 'Quelques chantiers récents'
+  bouton: 'Toutes les réalisations'
+
+# --- Les catégories, dans l'ordre d'affichage ------------------------------------
+categories:
+  - id: exterieurs
+    titre: 'Extérieurs'
+  - id: interieurs
+    titre: 'Intérieurs'
+  - id: renovation
+    titre: 'Rénovation'
+
+# --- Les photos -----------------------------------------------------------------
+# TODO : légendes rédigées d'après les photos, à confirmer par Evan
+photos:
+  - fichier: 'terrasse-piscine-eclairage-nuit.jpg'
+    legende: 'Terrasse bois et piscine, avec éclairage intégré'
+    categorie: exterieurs
+
+  - fichier: 'terrasse-bois-piscine-1.jpg'
+    legende: 'Terrasse en bois autour d’une piscine'
+    categorie: exterieurs
+    accueil: 2
+
+  - fichier: 'terrasse-bois-piscine-2.jpg'
+    legende: 'Terrasse et habillage bois de la piscine'
+    categorie: exterieurs
+
+  - fichier: 'terrasse-piscine-structure.jpg'
+    legende: 'Terrasse de piscine : pose de la structure'
+    categorie: exterieurs
+
+  - fichier: 'terrasse-piscine-terminee.jpg'
+    legende: 'Terrasse de piscine terminée'
+    categorie: exterieurs
+
+  - fichier: 'pergola-bois.jpg'
+    legende: 'Pergola en bois'
+    categorie: exterieurs
+    accueil: 4
+
+  - fichier: 'pergola-pose-toiture.jpg'
+    legende: 'Pergola : pose des liteaux de toiture'
+    categorie: exterieurs
+
+  - fichier: 'meuble-tv-niches-eclairees.jpg'
+    legende: 'Mur TV en plaques de plâtre, niches arrondies éclairées'
+    categorie: interieurs
+
+  - fichier: 'salon-arche.jpg'
+    legende: 'Séjour ouvert par une arche'
+    categorie: interieurs
+    accueil: 1
+
+  - fichier: 'habillage-escalier.jpg'
+    legende: 'Habillage décoratif sous un escalier'
+    categorie: interieurs
+    accueil: 3
+
+  - fichier: 'chambre-niche-arche.jpg'
+    legende: 'Tête de lit en niche arrondie'
+    categorie: interieurs
+
+  - fichier: 'meuble-tv-niches.jpg'
+    legende: 'Mur TV à niches, vue de jour'
+    categorie: interieurs
+    accueil: 5
+
+  - fichier: 'niches-entree.jpg'
+    legende: 'Niches décoratives dans une entrée'
+    categorie: interieurs
+
+  - fichier: 'garage-avant-travaux-1.jpg'
+    legende: 'Rénovation d’un garage : état avant travaux'
+    categorie: renovation
+    etiquette: 'Avant'
+
+  - fichier: 'garage-avant-travaux-2.jpg'
+    legende: 'Rénovation d’un garage : état avant travaux'
+    categorie: renovation
+    etiquette: 'Avant'
+
+  - fichier: 'garage-avant-travaux-3.jpg'
+    legende: 'Rénovation d’un garage : état avant travaux'
+    categorie: renovation
+    etiquette: 'Avant'
+
+  - fichier: 'garage-avant-travaux-4.jpg'
+    legende: 'Rénovation d’un garage : état avant travaux'
+    categorie: renovation
+    etiquette: 'Avant'

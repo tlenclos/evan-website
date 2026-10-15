@@ -2,25 +2,15 @@
 #  LES AVIS CLIENTS affichés sur la page d'accueil.
 #  Même principe que les prestations : un bloc par avis, « id » unique.
 #  Pour ne rien afficher, remplacez tout le contenu par une liste vide : []
+#
+#  Modèle d'avis à copier (retirez les # en début de ligne) :
+#
+#  - id: prenom-initiale
+#    texte: >-
+#      Le texte de l'avis, tel que le client l'a écrit.
+#    auteur: 'Prénom N.'
+#    lieu: 'Angoulême'
 # =============================================================================
 
-- id: claire-m
-  texte: >-
-    Le dressing correspond exactement au plan présenté, et la pose s'est faite
-    en une journée sans rien salir. On sent le travail d'atelier.
-  auteur: 'Claire M.' # TODO
-  lieu: 'Nantes'
-
-- id: famille-b
-  texte: >-
-    Notre escalier ancien a retrouvé une seconde vie pour bien moins cher qu'un
-    remplacement. Conseils clairs et devis tenu.
-  auteur: 'Famille B.' # TODO
-  lieu: 'Rezé'
-
-- id: thomas-l
-  texte: >-
-    Une table sur mesure pour une pièce compliquée. Écoute, délais respectés,
-    finitions impeccables.
-  auteur: 'Thomas L.' # TODO
-  lieu: 'Sainte-Luce-sur-Loire'
+# TODO : ajouter de vrais avis clients (la section est masquée tant que la liste est vide)
+[]

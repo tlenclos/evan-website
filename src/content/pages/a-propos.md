@@ -1,27 +1,23 @@
 ---
 titre: 'À propos'
-description: 'Menuisier ébéniste formé aux assemblages traditionnels, installé à Nantes depuis 2015. Parcours, méthode et matériaux.'
+description: 'EB Concept & Rénovation, entreprise de rénovation et d’aménagement installée à Angoulême : la façon de travailler.'
 hero:
-  titre: 'Un atelier, une méthode'
+  titre: 'Un artisan, du devis à la finition'
   texte: >-
-    Formé à l'ébénisterie traditionnelle, installé à mon compte depuis 2015.
-    Je travaille seul, sur un nombre limité de chantiers à la fois.
+    EB Concept & Rénovation est une entreprise de rénovation et d’aménagement
+    installée à Angoulême depuis 2026.
 ---
 
-## Le parcours
+<!-- TODO : à compléter avec Evan (parcours, formation, expérience) -->
 
-Après un CAP d'ébénisterie et plusieurs années passées en atelier d'agencement,
-j'ai ouvert mon propre espace de travail à Nantes en 2015. J'y fabrique
-aujourd'hui l'essentiel des pièces que je pose. <!-- TODO : à réécrire -->
+## Ce que je fais
 
-## Les matériaux
-
-Je privilégie les bois issus de filières françaises et européennes, en massif ou
-en panneaux plaqués selon l'usage. Les finitions sont réalisées à l'huile ou au
-vernis à faible teneur en solvants.
+Électricité générale, plaquisterie, parquet, terrasses et pergolas en bois,
+ainsi que divers travaux multiservices. Réunir ces métiers permet de mener un
+chantier de bout en bout, sans multiplier les intervenants.
 
 ## La façon de travailler
 
-Un seul chantier important à la fois. Cela allonge parfois le délai de démarrage,
-mais garantit que le projet en cours reçoit toute l'attention nécessaire, et que
-les dates annoncées sont tenues.
+Un travail soigné et des réalisations sur mesure : chaque projet est pensé
+pour le lieu, à partir d’une visite sur place, et le chantier est laissé
+propre.

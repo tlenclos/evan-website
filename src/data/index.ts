@@ -1,9 +1,11 @@
+import { existsSync } from 'node:fs';
 import { load as chargerYaml } from 'js-yaml';
 import { z } from 'astro/zod';
 // `?raw` demande à l'outil de construction d'insérer le contenu brut du fichier.
 import contenuSite from './site.yaml?raw';
 import contenuPrestations from './prestations.yaml?raw';
 import contenuTemoignages from './temoignages.yaml?raw';
+import contenuRealisations from './realisations.yaml?raw';
 
 /**
  * Chargement et validation des données du site (les fichiers .yaml de ce dossier).
@@ -33,13 +35,25 @@ function valider<T>(schema: z.ZodType<T>, contenu: string, nomFichier: string): 
   return resultat.data;
 }
 
+// Une faute de frappe dans un nom d'image afficherait une image cassée : on la refuse.
+const imageExistante = (cheminPublic: string) => existsSync(`public${cheminPublic}`);
+
+// Nom d'une photo de public/images/realisations/, utilisable dans tous les fichiers de contenu.
+export const schemaNomPhoto = z
+  .string()
+  .refine(
+    (fichier) => imageExistante(`/images/realisations/${fichier}`),
+    'fichier introuvable dans public/images/realisations/',
+  );
+
 // --- Réglages généraux : src/data/site.yaml ---------------------------------
 const schemaSite = z.object({
   nom: z.string().min(1),
+  logo: z.string().refine(imageExistante, 'fichier introuvable dans public/'),
   metier: z.string().min(1),
-  baseline: z.string().min(1),
   description: z.string().min(1),
   zone: z.string().min(1),
+  formeJuridique: z.string().min(1),
   contact: z.object({
     email: z.email(),
     telephone: z.string().min(1),
@@ -62,6 +76,7 @@ const schemaPrestations = z
       description: z.string().min(1),
       tarif: z.string().optional(),
       details: z.array(z.string()).optional(),
+      photo: schemaNomPhoto.optional(),
     }),
   )
   .min(1);
@@ -76,10 +91,46 @@ const schemaTemoignages = z.array(
   }),
 );
 
+// --- Réalisations : src/data/realisations.yaml -----------------------------
+const schemaRealisations = z
+  .object({
+    apercuAccueil: z.object({
+      surtitre: z.string().min(1),
+      titre: z.string().min(1),
+      bouton: z.string().min(1),
+    }),
+    categories: z.array(z.object({ id: z.string().min(1), titre: z.string().min(1) })).min(1),
+    photos: z
+      .array(
+        z.object({
+          fichier: schemaNomPhoto,
+          legende: z.string().min(1),
+          categorie: z.string().min(1),
+          etiquette: z.string().optional(),
+          accueil: z.number().int().min(1).max(5).optional(),
+        }),
+      )
+      .min(1),
+  })
+  .superRefine((realisations, contexte) => {
+    const idsCategories = realisations.categories.map((categorie) => categorie.id);
+    realisations.photos.forEach((photo, index) => {
+      if (!idsCategories.includes(photo.categorie)) {
+        contexte.addIssue({
+          code: 'custom',
+          path: ['photos', index, 'categorie'],
+          message: `catégorie inconnue, choisir parmi : ${idsCategories.join(', ')}`,
+        });
+      }
+    });
+  });
+
 export const site = valider(schemaSite, contenuSite, 'site.yaml');
 export const prestations = valider(schemaPrestations, contenuPrestations, 'prestations.yaml');
 export const temoignages = valider(schemaTemoignages, contenuTemoignages, 'temoignages.yaml');
+export const realisations = valider(schemaRealisations, contenuRealisations, 'realisations.yaml');
 
 export type Site = z.infer<typeof schemaSite>;
 export type Prestation = z.infer<typeof schemaPrestations>[number];
 export type Temoignage = z.infer<typeof schemaTemoignages>[number];
+export type PhotoRealisation = z.infer<typeof schemaRealisations>['photos'][number];

@@ -1,6 +1,6 @@
 ---
 titre: 'Contact'
-description: "Contacter l'atelier pour un devis gratuit : téléphone, e-mail, adresse et horaires."
+description: 'Contacter EB Concept & Rénovation pour un devis gratuit : téléphone, e-mail, adresse et horaires.'
 hero:
   titre: 'Parlons de votre projet'
   texte: >-

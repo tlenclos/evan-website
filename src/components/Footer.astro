@@ -4,41 +4,37 @@ import { site } from '../data';
 const annee = new Date().getFullYear();
 ---
 
-<footer class="border-t border-ink-200 bg-ink-900 text-ink-200">
-  <div class="mx-auto grid max-w-5xl gap-10 px-5 py-14 sm:px-8 md:grid-cols-3">
+<footer class="border-t border-ink-200 bg-surface-muted text-ink-800">
+  <div class="mx-auto grid max-w-6xl gap-10 px-4 py-14 sm:grid-cols-2 sm:px-10 lg:grid-cols-4">
     <div>
-      <p class="font-display text-lg text-white">{site.nom}</p>
-      <p class="mt-1 text-sm text-ink-400">{site.metier}</p>
-      <p class="mt-4 text-sm leading-relaxed text-ink-300">{site.zone}</p>
+      <img src={site.logo} alt={site.nom} width="205" height="320" class="h-24 w-auto" />
+      <p class="mt-4 text-sm text-ink-600">{site.zone}</p>
     </div>
 
     <div>
-      <h2 class="text-sm font-semibold tracking-wide text-white uppercase">Contact</h2>
-      <ul class="mt-4 space-y-2 text-sm">
+      <h2 class="font-medium text-ink-700">Contact</h2>
+      <ul class="mt-3 space-y-1.5 text-sm">
         <li>
-          <a href={`tel:${site.contact.telephone}`} class="hover:text-white hover:underline">
+          <a href={`tel:${site.contact.telephone}`} class="hover:text-brand-600">
             {site.contact.telephoneAffiche}
           </a>
         </li>
         <li>
-          <a
-            href={`mailto:${site.contact.email}`}
-            class="break-all hover:text-white hover:underline"
-          >
+          <a href={`mailto:${site.contact.email}`} class="break-all hover:text-brand-600">
             {site.contact.email}
           </a>
         </li>
-        <li class="text-ink-300">{site.contact.adresse}</li>
+        <li>{site.contact.adresse}</li>
       </ul>
       {site.reseaux.length > 0 && (
-        <ul class="mt-4 flex gap-4 text-sm">
+        <ul class="mt-3 flex gap-4 text-sm">
           {site.reseaux.map((reseau) => (
             <li>
               <a
                 href={reseau.url}
                 rel="noopener noreferrer"
                 target="_blank"
-                class="hover:text-white hover:underline"
+                class="underline underline-offset-2 hover:text-brand-600"
               >
                 {reseau.nom}
               </a>
@@ -49,26 +45,39 @@ const annee = new Date().getFullYear();
     </div>
 
     <div>
-      <h2 class="text-sm font-semibold tracking-wide text-white uppercase">Horaires</h2>
-      <ul class="mt-4 space-y-2 text-sm">
+      <h2 class="font-medium text-ink-700">Horaires</h2>
+      <ul class="mt-3 space-y-1.5 text-sm">
         {site.horaires.map((creneau) => (
-          <li class="flex justify-between gap-4 border-b border-ink-800 pb-2">
-            <span class="text-ink-300">{creneau.jour}</span>
-            <span>{creneau.heures}</span>
+          <li class="flex justify-between gap-4">
+            <span>{creneau.jour}</span>
+            <span class="text-ink-600">{creneau.heures}</span>
           </li>
         ))}
       </ul>
     </div>
+
+    <nav aria-label="Pied de page">
+      <h2 class="font-medium text-ink-700">Le site</h2>
+      <ul class="mt-3 space-y-1.5 text-sm">
+        {site.menu.map((lien) => (
+          <li>
+            <a href={lien.url} class="hover:text-brand-600">
+              {lien.texte}
+            </a>
+          </li>
+        ))}
+        <li>
+          <a href="/mentions-legales/" class="hover:text-brand-600">
+            Mentions légales
+          </a>
+        </li>
+      </ul>
+    </nav>
   </div>
 
-  <div class="border-t border-ink-800">
-    <div class="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-2 px-5 py-5 text-xs text-ink-400 sm:px-8">
-      <p>
-        © {annee} {site.nom} — SIRET {site.contact.siret}
-      </p>
-      <a href="/mentions-legales/" class="hover:text-white hover:underline">
-        Mentions légales
-      </a>
-    </div>
+  <div class="border-t border-ink-200">
+    <p class="mx-auto max-w-6xl px-4 py-5 text-xs text-ink-600 sm:px-10">
+      © {annee} {site.nom} — {site.formeJuridique} — SIRET {site.contact.siret}
+    </p>
   </div>
 </footer>

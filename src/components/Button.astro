@@ -1,25 +1,34 @@
 ---
 /**
- * Bouton / lien d'action.
+ * Bouton / lien d'action, en forme de pilule.
  * Utilisé partout pour les appels à l'action : les styles ne sont définis qu'ici.
+ * « clair » sert sur les fonds foncés (bandeau d'appel taupe).
  */
 interface Props {
   href: string;
-  variante?: 'principal' | 'secondaire';
+  variante?: 'principal' | 'secondaire' | 'clair';
+  compact?: boolean;
   class?: string;
 }
 
-const { href, variante = 'principal', class: classeSupplementaire = '' } = Astro.props;
+const {
+  href,
+  variante = 'principal',
+  compact = false,
+  class: classeSupplementaire = '',
+} = Astro.props;
 
 const base =
-  'inline-flex items-center justify-center gap-2 rounded-button px-5 py-3 text-sm font-semibold transition-colors';
+  'inline-flex items-center justify-center gap-2 rounded-button font-medium transition-colors';
+const taille = compact ? 'min-h-11 px-5 text-sm' : 'min-h-12 px-6 text-base';
 
 const variantes = {
   principal: 'bg-brand-600 text-white hover:bg-brand-700',
-  secondaire: 'border border-ink-300 bg-white text-ink-800 hover:border-ink-400 hover:bg-ink-50',
+  secondaire: 'border-2 border-ink-700 text-ink-700 hover:bg-ink-700 hover:text-ink-50',
+  clair: 'bg-brand-300 text-ink-900 hover:bg-brand-200',
 };
 ---
 
-<a href={href} class={`${base} ${variantes[variante]} ${classeSupplementaire}`}>
+<a href={href} class={`${base} ${taille} ${variantes[variante]} ${classeSupplementaire}`}>
   <slot />
 </a>

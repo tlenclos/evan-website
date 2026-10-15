@@ -1,22 +1,60 @@
 ---
-# Les lignes entre les deux --- règlent les titres et le grand bandeau du haut.
+# Les lignes entre les deux --- règlent tous les textes de la page d'accueil.
+# Les photos se désignent par leur nom de fichier dans public/images/realisations/.
 titre: 'Accueil'
-description: 'Menuisier ébéniste à Nantes : agencement sur mesure, mobilier bois et rénovation de menuiseries. Devis gratuit sous 48 h.'
+description: 'EB Concept & Rénovation à Angoulême : électricité, plaquisterie, parquet, terrasses et pergolas en bois, multiservices. Travail soigné et sur mesure.'
+
+# --- Le grand bandeau du haut
 hero:
-  titre: 'Le bois, ajusté à votre intérieur'
+  titre: 'Des lieux qui vous ressemblent, dedans comme dehors.'
   texte: >-
-    Atelier de menuiserie installé à Nantes. Je conçois, fabrique et pose des
-    agencements sur mesure et du mobilier bois, pour des particuliers comme
-    pour des commerces.
-  ctaTexte: 'Demander un devis gratuit'
-  ctaUrl: '/contact/'
+    EB Concept & Rénovation vous accompagne dans vos projets de rénovation et
+    d’aménagement : électricité générale, plaquisterie, parquet, terrasses et
+    pergolas en bois, avec un travail soigné et sur mesure.
+  ctaTexte: 'Voir les réalisations'
+  ctaUrl: '/realisations/'
+  photo: 'meuble-tv-niches-eclairees.jpg'
+  photoSecondaire: 'terrasse-piscine-eclairage-nuit.jpg'
+  legendePhoto: 'Niches en arche éclairées'
+
+# --- Les prestations (la liste vient de src/data/prestations.yaml)
+savoirFaire:
+  surtitre: 'Savoir-faire'
+  titre: 'Cinq métiers, un seul interlocuteur'
+  lien: 'Toutes les prestations'
+
+# --- Un chantier mis en avant
+# TODO : vérifier avec Evan que ces deux photos viennent du même chantier
+chantierUne:
+  surtitre: 'Chantier à la une'
+  titre: 'Une terrasse de piscine, de la structure à la finition'
+  texte: >-
+    Pose de la structure, des lames, puis habillage du bassin : un seul
+    interlocuteur du début à la fin.
+  photo: 'terrasse-piscine-terminee.jpg'
+  etapes:
+    - photo: 'terrasse-piscine-structure.jpg'
+      legende: '1 · Structure'
+    - photo: 'terrasse-piscine-terminee.jpg'
+      legende: '2 · Terminée'
+  bouton: 'Voir toutes les réalisations'
+
+# --- Les étapes d'un projet
+etapes:
+  titre: 'Comment se passe un projet'
+  liste:
+    - titre: 'Visite et écoute'
+      texte: 'On regarde les lieux ensemble et on parle de vos envies.'
+    - titre: 'Plan et devis'
+      texte: 'Une proposition claire, chiffrée, sans surprise.'
+    - titre: 'Chantier'
+      texte: 'Réalisation soignée, chantier propre, un seul interlocuteur.'
+    - titre: 'Finitions et lumière'
+      texte: 'Les derniers détails, jusqu’à l’éclairage.'
+
+# --- Le bandeau d'appel en bas de page
+appel:
+  titre: 'Un projet de terrasse, d’aménagement ou de rénovation ?'
+  texte: 'Parlez-en à Evan : visite et devis gratuits.'
+  photo: 'pergola-bois.jpg'
 ---
-
-## Un interlocuteur unique, du croquis à la pose
-
-Vous parlez à la personne qui fabriquera votre meuble. Pas d'intermédiaire, pas
-de sous-traitance : je prends les mesures, je dessine, je fabrique à l'atelier
-et j'installe chez vous.
-
-Chaque projet commence par une visite sur place et un plan chiffré, remis sous
-48 heures et sans engagement.

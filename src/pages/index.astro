@@ -1,59 +1,156 @@
 ---
-import { getEntry, render } from 'astro:content';
+import { getEntry } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Hero from '../components/Hero.astro';
 import Section from '../components/Section.astro';
 import Button from '../components/Button.astro';
 import PrestationCard from '../components/PrestationCard.astro';
-import { site, prestations, temoignages } from '../data';
+import BandeauAppel from '../components/BandeauAppel.astro';
+import { prestations, temoignages, realisations } from '../data';
 
-// Le texte de cette page se modifie dans src/content/pages/accueil.md
+// Tous les textes de cette page se modifient dans src/content/pages/accueil.md
 const page = await getEntry('pages', 'accueil');
 if (!page) throw new Error('Le fichier src/content/pages/accueil.md est introuvable.');
-const { Content } = await render(page);
+const { hero, savoirFaire, chantierUne, etapes, appel } = page.data;
+
+const cheminPhoto = (fichier: string) => `/images/realisations/${fichier}`;
+
+// Mosaïque : les photos portant « accueil: 1 » à « accueil: 5 » dans src/data/realisations.yaml.
+const photosMosaique = realisations.photos
+  .filter((photo) => photo.accueil !== undefined)
+  .sort((a, b) => (a.accueil ?? 0) - (b.accueil ?? 0));
+
+// Sur mobile (2 colonnes) comme sur ordinateur (4 colonnes), chaque place a sa forme.
+const formesMosaique = [
+  'row-span-2 rounded-arch',
+  'col-span-2 rounded-card',
+  'rounded-card lg:row-span-2',
+  'rounded-card',
+  'col-span-2 rounded-card lg:col-span-1',
+];
 ---
 
 <BaseLayout titre={page.data.titre} description={page.data.description}>
-  {page.data.hero && <Hero {...page.data.hero} />}
+  {hero && <Hero {...hero} />}
 
-  <Section>
-    <div class="prose-site max-w-2xl">
-      <Content />
-    </div>
-  </Section>
+  {savoirFaire && (
+    <Section fond="creme" surtitre={savoirFaire.surtitre} titre={savoirFaire.titre}>
+      <a
+        slot="lien"
+        href="/prestations/"
+        class="font-medium text-ink-700 underline-offset-4 hover:text-brand-600 hover:underline"
+      >
+        {savoirFaire.lien} →
+      </a>
+      <div class="grid gap-5 sm:grid-cols-2 sm:gap-7 lg:grid-cols-3">
+        {prestations.map((prestation) => (
+          <PrestationCard
+            titre={prestation.titre}
+            description={prestation.description}
+            photo={prestation.photo}
+          />
+        ))}
+      </div>
+    </Section>
+  )}
 
-  <Section
-    fond="creme"
-    titre="Les prestations"
-    chapeau="Quatre familles d'intervention, du meuble unique au chantier d'agencement complet."
-  >
-    <div class="grid gap-6 sm:grid-cols-2">
-      {prestations.map((prestation) => (
-        <PrestationCard
-          titre={prestation.titre}
-          description={prestation.description}
-          tarif={prestation.tarif}
-        />
-      ))}
-    </div>
-    <div class="mt-10">
-      <Button href="/prestations/" variante="secondaire">
-        Voir le détail des prestations
-      </Button>
-    </div>
-  </Section>
+  {chantierUne && (
+    <Section>
+      <div class="grid items-end gap-7 lg:grid-cols-12">
+        <div class="relative lg:col-span-7">
+          <img
+            src={cheminPhoto(chantierUne.photo)}
+            alt={chantierUne.titre}
+            loading="lazy"
+            decoding="async"
+            class="h-110 w-full rounded-card object-cover sm:h-160"
+          />
+          <p class="absolute top-4 left-4 rounded-button bg-brand-600 px-4 py-2 text-xs font-medium tracking-widest text-white uppercase sm:top-6 sm:left-6">
+            {chantierUne.surtitre}
+          </p>
+        </div>
+        <div class="flex flex-col gap-6 lg:col-span-5 lg:pb-2">
+          <h2 class="font-display text-3xl leading-tight font-medium text-ink-700 sm:text-4xl">
+            {chantierUne.titre}
+          </h2>
+          <p class="leading-relaxed text-ink-800">{chantierUne.texte}</p>
+          {chantierUne.etapes.length > 0 && (
+            <div class="grid grid-cols-3 gap-3">
+              {chantierUne.etapes.map((etape) => (
+                <figure class="flex flex-col gap-2">
+                  <img
+                    src={cheminPhoto(etape.photo)}
+                    alt=""
+                    loading="lazy"
+                    decoding="async"
+                    class="h-25 w-full rounded-thumb object-cover sm:h-35"
+                  />
+                  <figcaption class="text-sm text-ink-600">{etape.legende}</figcaption>
+                </figure>
+              ))}
+            </div>
+          )}
+          <div>
+            <Button href="/realisations/" variante="secondaire">
+              {chantierUne.bouton}
+            </Button>
+          </div>
+        </div>
+      </div>
+    </Section>
+  )}
+
+  {photosMosaique.length > 0 && (
+    <Section
+      fond="creme"
+      surtitre={realisations.apercuAccueil.surtitre}
+      titre={realisations.apercuAccueil.titre}
+      centre
+    >
+      <div class="grid grid-flow-dense auto-rows-40 grid-cols-2 gap-2.5 sm:gap-5 lg:auto-rows-65 lg:grid-cols-4">
+        {photosMosaique.map((photo, index) => (
+          <img
+            src={cheminPhoto(photo.fichier)}
+            alt={photo.legende}
+            loading="lazy"
+            decoding="async"
+            class={`size-full object-cover ${formesMosaique[index] ?? 'rounded-card'}`}
+          />
+        ))}
+      </div>
+      <div class="mt-10 flex justify-center">
+        <Button href="/realisations/">{realisations.apercuAccueil.bouton}</Button>
+      </div>
+    </Section>
+  )}
+
+  {etapes && (
+    <Section titre={etapes.titre}>
+      <ol class="grid gap-5 sm:grid-cols-2 sm:gap-7 lg:grid-cols-4">
+        {etapes.liste.map((etape, index) => (
+          <li class="flex gap-4 border-t-2 border-argile-400 pt-4 sm:flex-col sm:gap-3 sm:pt-6">
+            <span class="font-semibold text-argile-600">{String(index + 1).padStart(2, '0')}</span>
+            <span class="flex flex-col gap-1 sm:gap-3">
+              <span class="font-display text-xl font-medium text-ink-700">{etape.titre}</span>
+              <span class="leading-relaxed text-ink-800">{etape.texte}</span>
+            </span>
+          </li>
+        ))}
+      </ol>
+    </Section>
+  )}
 
   {temoignages.length > 0 && (
-    <Section titre="Ce qu'en disent les clients">
+    <Section fond="creme" titre="Ce qu'en disent les clients">
       <div class="grid gap-6 md:grid-cols-3">
         {temoignages.map((temoignage) => (
-          <figure class="rounded-card border border-ink-200 bg-surface p-6">
-            <blockquote class="leading-relaxed text-ink-700">« {temoignage.texte} »</blockquote>
-            <figcaption class="mt-4 text-sm font-semibold text-ink-900">
+          <figure class="rounded-card border border-ink-200 bg-white p-7">
+            <blockquote class="text-lg leading-relaxed text-ink-900">
+              « {temoignage.texte} »
+            </blockquote>
+            <figcaption class="mt-4 text-sm text-ink-600">
               {temoignage.auteur}
-              {temoignage.lieu && (
-                <span class="font-normal text-ink-500"> — {temoignage.lieu}</span>
-              )}
+              {temoignage.lieu && <span> · {temoignage.lieu}</span>}
             </figcaption>
           </figure>
         ))}
@@ -61,18 +158,5 @@ const { Content } = await render(page);
     </Section>
   )}
 
-  <Section fond="creme">
-    <div class="rounded-card bg-ink-900 px-6 py-12 text-center sm:px-12">
-      <h2 class="font-display text-3xl text-white">Un projet en tête ?</h2>
-      <p class="mx-auto mt-4 max-w-xl leading-relaxed text-ink-300">
-        Visite et devis gratuits — {site.zone}. Réponse sous 48 heures.
-      </p>
-      <div class="mt-8 flex flex-wrap justify-center gap-3">
-        <Button href="/contact/">{site.ctaPrincipal.texte}</Button>
-        <Button href={`tel:${site.contact.telephone}`} variante="secondaire">
-          {site.contact.telephoneAffiche}
-        </Button>
-      </div>
-    </div>
-  </Section>
+  {appel && <BandeauAppel {...appel} />}
 </BaseLayout>

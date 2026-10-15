@@ -12,45 +12,60 @@
    la page /styleguide affiche des cases vides.
    =========================================================================== */
 @theme static {
-  /* --- Couleur principale (boutons, liens, accents) : terre cuite chaleureuse */
-  --color-brand-50: #fdf5f0;
-  --color-brand-100: #fae8dc;
-  --color-brand-200: #f4cdb4;
-  --color-brand-300: #eaa982;
-  --color-brand-400: #de7f4f;
-  --color-brand-500: #d1602f;
-  --color-brand-600: #b84a20; /* couleur de référence : contraste AA sur blanc */
-  --color-brand-700: #98391b;
-  --color-brand-800: #7a2f1a;
-  --color-brand-900: #632918;
+  /* Charte « Grège & arche », tirée du logo (validée dans le projet Claude Design). */
 
-  /* --- Neutres (textes, bordures, fonds) : gris légèrement chauds */
-  --color-ink-50: #faf9f7;
-  --color-ink-100: #f2efeb;
-  --color-ink-200: #e4dfd8;
-  --color-ink-300: #cbc3b8;
-  --color-ink-400: #a2988a;
-  --color-ink-500: #7d7365;
-  --color-ink-600: #5f564b;
-  --color-ink-700: #4a423a;
-  --color-ink-800: #332e29;
-  --color-ink-900: #1f1c19;
+  /* --- Couleur d'accent (boutons, liens actifs) : miel, la couleur du bois */
+  --color-brand-50: #fbf5ee;
+  --color-brand-100: #f6e8d6;
+  --color-brand-200: #eed2b0;
+  --color-brand-300: #e2b583; /* bouton clair sur fond taupe */
+  --color-brand-400: #d39d65;
+  --color-brand-500: #c4864a;
+  --color-brand-600: #a8642c; /* couleur de référence : contraste AA avec du texte blanc */
+  --color-brand-700: #87501f;
+  --color-brand-800: #6b3f19;
+  --color-brand-900: #523013;
+
+  /* --- Neutres (fonds, traits, textes) : du grège du logo au taupe de « EB » */
+  --color-ink-50: #f8f6f4;
+  --color-ink-100: #ece8e7; /* fond du logo */
+  --color-ink-200: #ddd5cf;
+  --color-ink-300: #c8beb6;
+  --color-ink-400: #9a8b7c;
+  --color-ink-500: #7a6b5c;
+  --color-ink-600: #6a5c4e;
+  --color-ink-700: #5a4e42; /* « EB » du logo : titres */
+  --color-ink-800: #4a4038; /* texte courant */
+  --color-ink-900: #2e2721;
+
+  /* --- Touches décoratives : argile, la terre de l'habillage d'escalier */
+  --color-argile-50: #f7ece7;
+  --color-argile-100: #ecd3c8;
+  --color-argile-200: #e0b9a8;
+  --color-argile-300: #d3a18c;
+  --color-argile-400: #c48a74;
+  --color-argile-500: #b0725c;
+  --color-argile-600: #9c5b47;
+  --color-argile-700: #854b3a;
+  --color-argile-800: #6e3e2f;
+  --color-argile-900: #573125;
 
   /* --- Fonds de page */
-  --color-surface: #ffffff;
-  --color-surface-muted: #faf7f2; /* fond crème des sections alternées */
+  --color-surface: #f8f6f4;
+  --color-surface-muted: #ece8e7; /* fond grège des sections alternées */
 
   /* --- Typographie
-     Deux familles suffisent. Les polices système évitent une dépendance
-     externe (Google Fonts) : chargement instantané et aucun cookie tiers. */
-  --font-sans:
-    ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  --font-display: 'Georgia', 'Times New Roman', ui-serif, serif;
+     Une seule famille, Jost, proche du lettrage du logo. Elle est servie par le
+     site lui-même (paquet @fontsource) : aucun appel à Google Fonts. */
+  --font-sans: 'Jost Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-display: 'Jost Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --leading-titre: 1.06; /* interligne serré des grands titres */
 
   /* --- Arrondis et ombres */
-  --radius-card: 0.75rem;
-  --radius-button: 0.5rem;
-  --shadow-card: 0 1px 2px rgb(31 28 25 / 0.06), 0 8px 24px -12px rgb(31 28 25 / 0.18);
+  --radius-card: 1.5rem;
+  --radius-thumb: 0.875rem; /* petites vignettes photo */
+  --radius-button: 9999px; /* boutons en pilule */
+  --shadow-card: 0 1px 2px rgb(46 39 33 / 0.05), 0 12px 32px -16px rgb(46 39 33 / 0.2);
 }
 
 /* ===========================================================================
@@ -65,6 +80,7 @@
     background-color: var(--color-surface);
     color: var(--color-ink-800);
     font-family: var(--font-sans);
+    font-size: 1.0625rem;
     -webkit-font-smoothing: antialiased;
   }
 
@@ -102,9 +118,10 @@
 
   & h2 {
     font-family: var(--font-display);
-    font-size: 1.5rem;
-    line-height: 1.3;
-    color: var(--color-ink-900);
+    font-size: 1.75rem;
+    font-weight: 500;
+    line-height: 1.2;
+    color: var(--color-ink-700);
     margin-top: 2em;
   }
 
@@ -115,16 +132,16 @@
   }
 
   & h3 {
-    font-weight: 600;
-    font-size: 1.125rem;
-    color: var(--color-ink-900);
+    font-weight: 500;
+    font-size: 1.25rem;
+    color: var(--color-ink-700);
     margin-top: 1.6em;
   }
 
   & p,
   & li {
-    color: var(--color-ink-700);
-    line-height: 1.7;
+    color: var(--color-ink-800);
+    line-height: 1.65;
   }
 
   & ul {
@@ -151,4 +168,20 @@
     color: var(--color-ink-900);
     font-weight: 600;
   }
+}
+
+/* Photo coiffée d'une arche, en écho aux niches arrondies des réalisations.
+   Le haut est un demi-ovale sur toute la largeur, le bas garde l'arrondi des cartes. */
+@utility rounded-arch {
+  border-radius: 50% 50% var(--radius-card) var(--radius-card) / 10rem 10rem var(--radius-card)
+    var(--radius-card);
+}
+
+/* Petit titre en capitales espacées, au-dessus des grands titres. */
+@utility surtitre {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--color-ink-600);
 }

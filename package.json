@@ -19,6 +19,7 @@
   "homepage": "https://github.com/tlenclos/evan-website#readme",
   "dependencies": {
     "@astrojs/sitemap": "^3.7.4",
+    "@fontsource-variable/jost": "^5.2.8",
     "@tailwindcss/vite": "^4.3.3",
     "astro": "^7.3.2",
     "js-yaml": "^5.4.1",
