@@ -1,0 +1,331 @@
+# =============================================================================
+#  CONFIGURATION DE L'INTERFACE D'ÉDITION (Pages CMS — https://app.pagescms.org)
+#  -----------------------------------------------------------------------------
+#  Ce fichier décrit les formulaires affichés dans Pages CMS. Il ne change rien
+#  au site lui-même.
+#
+#  Chaque champ reprend une règle des schémas Zod de `src/data/index.ts` et de
+#  `src/content.config.ts`. Modifier un schéma impose de modifier ce fichier :
+#  sinon l'interface accepte une saisie que la construction refusera ensuite.
+#
+#  Attention : Pages CMS réécrit entièrement un fichier à l'enregistrement. Les
+#  commentaires (# …) des fichiers .yaml et .md disparaissent alors. Les
+#  consignes destinées à la personne qui édite vivent donc ici, dans les
+#  « description » des champs.
+# =============================================================================
+
+media:
+  input: public/images
+  output: /images
+  categories: [image]
+  rename: safe
+
+settings:
+  commit:
+    identity: user
+    templates:
+      create: 'Créer {path} depuis Pages CMS'
+      update: 'Modifier {path} depuis Pages CMS'
+      delete: 'Supprimer {path} depuis Pages CMS'
+      rename: 'Renommer {oldPath} en {newPath} depuis Pages CMS'
+
+content:
+  # --- Texte des pages : src/content/pages/*.md ------------------------------
+  - name: pages
+    label: Pages
+    description: >-
+      Le texte de chaque page du site. Pour créer une nouvelle page, il faut
+      aussi modifier le code : demandez-le.
+    type: collection
+    path: src/content/pages
+    format: yaml-frontmatter
+    # Une page n'existe que si un fichier .astro lui correspond : on ne crée,
+    # ne renomme et ne supprime donc pas de page depuis l'interface.
+    operations:
+      create: false
+      rename: false
+      delete: false
+    view:
+      fields: [titre, description]
+      primary: titre
+    fields:
+      - name: titre
+        label: Titre de la page
+        description: Affiché dans l'onglet du navigateur et dans les résultats Google.
+        type: string
+        required: true
+      - name: description
+        label: Résumé pour Google
+        description: >-
+          Phrase affichée par Google sous le titre de la page. Idéalement entre
+          150 et 160 caractères.
+        type: text
+        required: true
+      - name: hero
+        label: Grand bandeau du haut de page
+        description: Facultatif. Laissez tout vide pour ne pas afficher de bandeau.
+        type: object
+        fields:
+          - name: titre
+            label: Titre du bandeau
+            type: string
+            required: true
+          - name: texte
+            label: Texte du bandeau
+            type: text
+            required: true
+          - name: ctaTexte
+            label: Texte du bouton
+            description: Facultatif. Sans texte, aucun bouton n'est affiché.
+            type: string
+          - name: ctaUrl
+            label: Lien du bouton
+            description: >-
+              Adresse d'une page du site, avec le « / » au début et à la fin, par
+              exemple /contact/
+            type: string
+      - name: body
+        label: Contenu de la page
+        type: rich-text
+        options:
+          format: markdown
+
+  # --- Réglages généraux : src/data/site.yaml --------------------------------
+  - name: site
+    label: Réglages du site
+    description: >-
+      Tout ce qui apparaît sur plusieurs pages : nom, coordonnées, horaires,
+      menu, pied de page.
+    type: file
+    path: src/data/site.yaml
+    format: yaml
+    operations:
+      delete: false
+    fields:
+      - name: nom
+        label: Nom
+        description: Affiché en haut de toutes les pages.
+        type: string
+        required: true
+      - name: metier
+        label: Métier
+        type: string
+        required: true
+      - name: baseline
+        label: Accroche
+        description: Phrase courte affichée sous le nom.
+        type: string
+        required: true
+      - name: description
+        label: Résumé pour Google
+        description: >-
+          Résumé du site affiché par Google. Idéalement entre 150 et 160
+          caractères.
+        type: text
+        required: true
+      - name: zone
+        label: Zone d'intervention
+        description: Par exemple « Nantes et 40 km alentour ».
+        type: string
+        required: true
+      - name: contact
+        label: Coordonnées
+        type: object
+        required: true
+        fields:
+          - name: email
+            label: Adresse e-mail
+            type: string
+            required: true
+            pattern:
+              regex: '^[^@\s]+@[^@\s]+\.[^@\s]+$'
+              message: 'Adresse e-mail invalide, par exemple contact@exemple.fr'
+          - name: telephone
+            label: Téléphone (pour le lien cliquable)
+            description: >-
+              Format international, sans espace : +33 suivi du numéro sans le 0,
+              par exemple +33612345678
+            type: string
+            required: true
+            pattern:
+              regex: '^\+[0-9]{6,15}$'
+              message: 'Écrivez +33 suivi du numéro sans le 0 initial, sans espace.'
+          - name: telephoneAffiche
+            label: Téléphone (tel qu'affiché)
+            description: La façon dont le numéro s'affiche, par exemple 06 12 34 56 78
+            type: string
+            required: true
+          - name: adresse
+            label: Adresse
+            type: string
+            required: true
+          - name: siret
+            label: SIRET
+            description: Obligatoire, affiché sur la page des mentions légales.
+            type: string
+            required: true
+      - name: horaires
+        label: Horaires
+        description: Une ligne par plage horaire, dans l'ordre d'affichage.
+        type: object
+        list:
+          min: 1
+          collapsible:
+            collapsed: true
+            summary: '{jour} : {heures}'
+        fields:
+          - name: jour
+            label: Jour(s)
+            description: Par exemple « Lundi – Vendredi ».
+            type: string
+            required: true
+          - name: heures
+            label: Heures
+            description: Par exemple « 8h00 – 18h00 » ou « Fermé ».
+            type: string
+            required: true
+      - name: reseaux
+        label: Réseaux sociaux
+        description: Affichés dans le pied de page. La liste peut rester vide.
+        type: object
+        list:
+          collapsible:
+            collapsed: true
+            summary: '{nom}'
+        fields:
+          - name: nom
+            label: Nom du réseau
+            description: Par exemple « Instagram ».
+            type: string
+            required: true
+          - name: url
+            label: Adresse du profil
+            type: string
+            required: true
+            pattern:
+              regex: '^https?://\S+$'
+              message: "L'adresse doit commencer par https://"
+      - name: menu
+        label: Menu de navigation
+        description: >-
+          L'ordre des lignes est l'ordre d'affichage. Vous pouvez renommer ou
+          réordonner les entrées ; pour ajouter une page, il faut aussi modifier
+          le code : demandez-le.
+        type: object
+        list:
+          min: 1
+          collapsible:
+            collapsed: true
+            summary: '{texte}'
+        fields:
+          - name: texte
+            label: Texte affiché
+            type: string
+            required: true
+          - name: url
+            label: Adresse de la page
+            description: Avec le « / » au début et à la fin, par exemple /contact/
+            type: string
+            required: true
+            pattern:
+              regex: '^/([a-z0-9-]+/)*$'
+              message: 'Commencez et terminez par « / », sans accent ni espace, par exemple /contact/'
+      - name: ctaPrincipal
+        label: Bouton d'appel à l'action (en haut à droite)
+        type: object
+        required: true
+        fields:
+          - name: texte
+            label: Texte du bouton
+            type: string
+            required: true
+          - name: url
+            label: Lien du bouton
+            description: Adresse d'une page du site, par exemple /contact/
+            type: string
+            required: true
+
+  # --- Prestations : src/data/prestations.yaml -------------------------------
+  - name: prestations
+    label: Prestations
+    description: >-
+      Alimente la page Prestations et l'aperçu de la page d'accueil. L'ordre de
+      la liste est l'ordre d'affichage.
+    type: file
+    path: src/data/prestations.yaml
+    format: yaml
+    operations:
+      delete: false
+    list:
+      min: 1
+      collapsible:
+        collapsed: true
+        summary: '{titre}'
+    fields:
+      - name: id
+        label: Identifiant
+        description: >-
+          Nom technique unique, en minuscules, sans accent ni espace, par
+          exemple pose-terrasse. Il n'est pas affiché sur le site.
+        type: string
+        required: true
+        pattern:
+          regex: '^[a-z0-9-]+$'
+          message: 'Minuscules, chiffres et tirets uniquement, par exemple pose-terrasse'
+      - name: titre
+        label: Titre
+        type: string
+        required: true
+      - name: description
+        label: Description
+        type: text
+        required: true
+      - name: tarif
+        label: Tarif
+        description: Facultatif. Par exemple « Sur devis » ou « À partir de 450 € ».
+        type: string
+      - name: details
+        label: Points forts
+        description: Facultatif. Une courte phrase par ligne.
+        type: string
+        list: true
+
+  # --- Avis clients : src/data/temoignages.yaml ------------------------------
+  - name: temoignages
+    label: Avis clients
+    description: >-
+      Affichés sur la page d'accueil, dans l'ordre de la liste. Si la liste est
+      vide, la section disparaît.
+    type: file
+    path: src/data/temoignages.yaml
+    format: yaml
+    operations:
+      delete: false
+    list:
+      collapsible:
+        collapsed: true
+        summary: '{auteur}'
+    fields:
+      - name: id
+        label: Identifiant
+        description: >-
+          Nom technique unique, en minuscules, sans accent ni espace, par
+          exemple claire-m. Il n'est pas affiché sur le site.
+        type: string
+        required: true
+        pattern:
+          regex: '^[a-z0-9-]+$'
+          message: 'Minuscules, chiffres et tirets uniquement, par exemple claire-m'
+      - name: texte
+        label: Avis
+        type: text
+        required: true
+      - name: auteur
+        label: Auteur
+        description: Par exemple « Claire M. ».
+        type: string
+        required: true
+      - name: lieu
+        label: Ville
+        description: Facultatif.
+        type: string
