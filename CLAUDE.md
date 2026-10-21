@@ -33,10 +33,11 @@ modification en une phrase.** Toutes les règles ci-dessous en découlent.
 ```
 src/
 ├── data/            DONNÉES STRUCTURÉES (YAML) — listes et réglages
-│   ├── index.ts       charge et valide les 3 fichiers .yaml ci-dessous
+│   ├── index.ts       charge et valide les fichiers .yaml ci-dessous
 │   ├── site.yaml      identité, menu, coordonnées, horaires, réseaux
 │   ├── prestations.yaml
-│   └── temoignages.yaml
+│   ├── temoignages.yaml
+│   └── realisations.yaml  photos de chantiers (fichiers dans public/images/realisations/)
 ├── content/pages/   TEXTE DES PAGES (Markdown) — un fichier = une page
 ├── content.config.ts  schéma du frontmatter des pages
 ├── components/      briques réutilisables
@@ -159,24 +160,14 @@ conteneur est derrière le proxy de Coolify.
 
 ---
 
-## Lien avec Claude Design (à faire)
+## Lien avec Claude Design
 
-Le design system existe déjà **dans le code** : les tokens de
-`src/styles/global.css` et leur rendu sur `/styleguide`.
+La charte actuelle (« Grège & arche », direction A) a été conçue dans le projet
+Claude Design https://claude.ai/artifact/1MvQxoeQK4aEWu1PABonbh, puis reportée
+dans le code : tokens de `src/styles/global.css` (miel, grège/taupe, argile,
+police Jost auto-hébergée via `@fontsource-variable/jost`, utilitaires
+`rounded-arch` et `surtitre`) et rendu vérifiable sur `/styleguide`.
 
-Il n'est pas encore synchronisé avec un projet claude.ai/design, car l'outil
-`DesignSync` exige une autorisation obtenue via `/design-login`, qui ne
-s'exécute que depuis une session Claude Code **interactive** (application de
-bureau ou terminal local) — pas depuis une session distante.
-
-Marche à suivre, une fois `/design-login` effectué :
-
-1. Générer un dossier de cartes de prévisualisation HTML à partir de
-   `/styleguide`, une par groupe (`Couleurs`, `Typo`, `Boutons`, `Cartes`,
-   `Navigation`), chacune commençant par un marqueur
-   `<!-- @dsCard group="…" -->`.
-2. `DesignSync` : `create_project` (ou `list_projects` pour réutiliser un projet
-   existant), puis `finalize_plan`, puis `write_files`.
-3. Le projet Claude Design devient l'endroit où valider visuellement une
-   évolution de charte ; `src/styles/global.css` reste la source de vérité, et
-   toute modification doit être reportée dans les deux sens.
+`src/styles/global.css` reste la source de vérité. Pour une évolution de charte,
+la valider d'abord dans le projet Claude Design, puis reporter les valeurs ici ;
+toute modification faite dans le code doit être répercutée dans le projet.

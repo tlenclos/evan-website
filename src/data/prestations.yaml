@@ -8,49 +8,63 @@
 #  Le champ « id » doit être unique et sans espaces ni accents.
 #  Pour supprimer une prestation : effacez son bloc complet.
 #
-#  Les champs « tarif » et « details » sont facultatifs.
+#  Les champs « tarif », « details » et « photo » sont facultatifs.
+#  « photo » : nom d'un fichier de public/images/realisations/.
 # =============================================================================
 
-- id: agencement
-  titre: 'Agencement sur mesure'
-  description: >-
-    Dressings, bibliothèques, meubles sous escalier : chaque pièce est dessinée
-    à partir des dimensions réelles de votre intérieur, puis fabriquée à
-    l'atelier avant d'être posée chez vous.
-  tarif: 'Sur devis' # TODO
-  details:
-    - 'Prise de mesures et plans 3D avant fabrication'
-    - 'Bois massif, contreplaqué ou panneaux plaqués'
-    - 'Pose comprise'
+# TODO : descriptions rédigées à partir du pitch d'Evan, à relire avec lui.
+# Ajoutez un « tarif » (ex. 'Sur devis') si vous souhaitez en afficher un.
 
-- id: mobilier
-  titre: 'Mobilier bois'
+- id: electricite
+  photo: 'meuble-tv-niches-eclairees.jpg'
+  titre: 'Électricité générale'
   description: >-
-    Tables, bureaux, étagères et pièces uniques réalisées à la commande, dans
-    des essences choisies avec vous.
-  tarif: 'À partir de 450 €' # TODO
+    Installation, rénovation et mise aux normes de l'électricité, de la
+    prise supplémentaire au tableau électrique complet.
   details:
-    - "Choix de l'essence et de la finition"
-    - 'Assemblages traditionnels'
-    - 'Livraison locale possible'
+    - 'Création et déplacement de prises et points lumineux'
+    - 'Éclairage intégré, spots, rubans LED'
+    - 'Remplacement de tableau électrique'
 
-- id: renovation
-  titre: 'Rénovation de menuiseries'
+- id: plaquisterie
+  photo: 'chambre-niche-arche.jpg'
+  titre: 'Plaquisterie'
   description: >-
-    Portes, parquets, escaliers et boiseries anciennes remis en état plutôt que
-    remplacés, dans le respect de l'existant.
-  tarif: 'Sur devis' # TODO
+    Cloisons, doublages et faux plafonds en plaques de plâtre, jusqu'aux
+    aménagements décoratifs : niches, arches, murs TV.
   details:
-    - 'Diagnostic sur place avant devis'
-    - 'Réparation, ponçage et finitions'
-    - 'Intervention en site occupé'
+    - 'Cloisons et doublages isolants'
+    - 'Faux plafonds'
+    - 'Niches et arches sur mesure'
 
-- id: pose
-  titre: 'Pose et petits travaux'
+- id: parquet
+  photo: 'salon-arche.jpg'
+  titre: 'Parquet'
   description: >-
-    Pose de parquet, de plinthes, d'étagères ou de portes intérieures, avec le
-    même soin que pour une pièce sur mesure.
-  tarif: 'Devis gratuit' # TODO
+    Pose de parquet massif, contrecollé ou stratifié, avec les plinthes et
+    les finitions.
   details:
-    - 'Déplacement dans un rayon de 40 km'
-    - 'Chantier laissé propre'
+    - 'Préparation du support'
+    - 'Pose flottante, collée ou clouée'
+    - 'Plinthes et barres de seuil'
+
+- id: terrasses-pergolas
+  photo: 'terrasse-bois-piscine-1.jpg'
+  titre: 'Terrasses et pergolas en bois'
+  description: >-
+    Terrasses en bois, tours de piscine et pergolas, conçues et posées sur
+    mesure pour prolonger la maison vers l'extérieur.
+  details:
+    - 'Structure sur plots ou lambourdes'
+    - 'Habillage bois de piscine'
+    - 'Pergolas en bois massif'
+
+- id: multiservices
+  photo: 'habillage-escalier.jpg'
+  titre: 'Travaux multiservices'
+  description: >-
+    Les petits et moyens travaux de la maison, avec le même soin qu'un
+    chantier complet.
+  details:
+    - 'Pose de portes, étagères, rangements'
+    - 'Petites réparations et finitions'

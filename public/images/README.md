@@ -10,3 +10,6 @@ Conseils :
 - Nommez les fichiers sans accent ni espace : `atelier-nantes.jpg`, pas `Atelier Nantes.jpg`.
 
 Une image déposée ici est accessible à l'adresse `/images/nom-du-fichier.jpg`.
+
+- `logo.png` : le logo affiché en haut du site (réglé dans `src/data/site.yaml`).
+- `realisations/` : les photos de chantiers, listées dans `src/data/realisations.yaml`.

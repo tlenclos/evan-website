@@ -1,0 +1,51 @@
+---
+import { getEntry } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import Section from '../components/Section.astro';
+import GaleriePhotos from '../components/GaleriePhotos.astro';
+import BandeauAppel from '../components/BandeauAppel.astro';
+import { realisations } from '../data';
+
+// Le texte de cette page se modifie dans src/content/pages/realisations.md
+// Les photos et les catégories se modifient dans src/data/realisations.yaml
+const page = await getEntry('pages', 'realisations');
+if (!page) throw new Error('Le fichier src/content/pages/realisations.md est introuvable.');
+
+const categories = realisations.categories
+  .map((categorie) => ({
+    ...categorie,
+    photos: realisations.photos.filter((photo) => photo.categorie === categorie.id),
+  }))
+  .filter((categorie) => categorie.photos.length > 0);
+---
+
+<BaseLayout titre={page.data.titre} description={page.data.description}>
+  {page.data.hero && (
+    <Hero {...page.data.hero}>
+      <nav aria-label="Catégories" class="flex flex-wrap gap-2.5">
+        {categories.map((categorie) => (
+          <a
+            href={`#${categorie.id}`}
+            class="inline-flex min-h-11 items-center rounded-button border-2 border-ink-300 px-5 font-medium text-ink-700 transition-colors hover:border-ink-700"
+          >
+            {categorie.titre}
+          </a>
+        ))}
+      </nav>
+    </Hero>
+  )}
+
+  {categories.map((categorie, index) => (
+    <Section
+      id={categorie.id}
+      titre={categorie.titre}
+      fond={index % 2 === 1 ? 'creme' : 'blanc'}
+      class="scroll-mt-20"
+    >
+      <GaleriePhotos photos={categorie.photos} />
+    </Section>
+  ))}
+
+  {page.data.appel && <BandeauAppel {...page.data.appel} />}
+</BaseLayout>

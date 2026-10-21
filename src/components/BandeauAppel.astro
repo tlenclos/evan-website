@@ -1,0 +1,52 @@
+---
+import Button from './Button.astro';
+import { site } from '../data';
+
+/**
+ * Bandeau taupe d'appel au devis, en bas de page.
+ * Son texte vient du champ « appel » du fichier Markdown de la page.
+ */
+interface Props {
+  titre: string;
+  texte?: string;
+  photo?: string;
+}
+
+const { titre, texte, photo } = Astro.props;
+---
+
+<section class="bg-surface px-4 pb-14 sm:px-10 sm:pb-26">
+  <div
+    class:list={[
+      'mx-auto grid max-w-6xl overflow-hidden rounded-card bg-ink-700 text-ink-50',
+      photo && 'lg:grid-cols-2',
+    ]}
+  >
+    {photo && (
+      <div class="relative h-52 lg:order-2 lg:h-auto lg:min-h-105">
+        <img
+          src={`/images/realisations/${photo}`}
+          alt=""
+          loading="lazy"
+          decoding="async"
+          class="absolute inset-0 size-full object-cover"
+        />
+      </div>
+    )}
+    <div class="flex flex-col justify-center gap-5 px-6 py-8 sm:p-16">
+      <h2 class="font-display text-3xl leading-tight font-medium sm:text-4xl">{titre}</h2>
+      {texte && <p class="text-lg leading-relaxed text-ink-100">{texte}</p>}
+      <div class="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-6">
+        <Button href={site.ctaPrincipal.url} variante="clair">
+          {site.ctaPrincipal.texte}
+        </Button>
+        <a
+          href={`tel:${site.contact.telephone}`}
+          class="py-2.5 text-center text-lg font-medium text-ink-50 hover:text-brand-300"
+        >
+          {site.contact.telephoneAffiche}
+        </a>
+      </div>
+    </div>
+  </div>
+</section>

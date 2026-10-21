@@ -18,13 +18,14 @@ const { Content } = await render(page);
   {page.data.hero && <Hero {...page.data.hero} />}
 
   <Section>
-    <div class="grid gap-6 sm:grid-cols-2">
+    <div class="grid gap-5 sm:grid-cols-2 sm:gap-7 lg:grid-cols-3">
       {prestations.map((prestation) => (
         <PrestationCard
           titre={prestation.titre}
           description={prestation.description}
           tarif={prestation.tarif}
           details={prestation.details}
+          photo={prestation.photo}
         />
       ))}
     </div>

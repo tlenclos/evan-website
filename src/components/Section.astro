@@ -2,16 +2,27 @@
 /**
  * Bloc de page : gère la largeur maximale, les marges et le fond.
  * Toutes les sections du site passent par ce composant pour rester alignées.
+ * Le contenu du slot « lien » s'affiche à droite du titre sur grand écran.
  */
 interface Props {
+  surtitre?: string;
   titre?: string;
   chapeau?: string;
   fond?: 'blanc' | 'creme';
+  centre?: boolean;
   id?: string;
   class?: string;
 }
 
-const { titre, chapeau, fond = 'blanc', id, class: classeSupplementaire = '' } = Astro.props;
+const {
+  surtitre,
+  titre,
+  chapeau,
+  fond = 'blanc',
+  centre = false,
+  id,
+  class: classeSupplementaire = '',
+} = Astro.props;
 
 const fonds = {
   blanc: 'bg-surface',
@@ -20,13 +31,24 @@ const fonds = {
 ---
 
 <section id={id} class={`${fonds[fond]} ${classeSupplementaire}`}>
-  <div class="mx-auto max-w-5xl px-5 py-16 sm:px-8 sm:py-20">
-    {(titre || chapeau) && (
-      <header class="mb-10 max-w-2xl">
-        {titre && (
-          <h2 class="font-display text-3xl leading-tight text-ink-900 sm:text-4xl">{titre}</h2>
-        )}
-        {chapeau && <p class="mt-4 text-lg leading-relaxed text-ink-600">{chapeau}</p>}
+  <div class="mx-auto max-w-6xl px-4 py-14 sm:px-10 sm:py-24">
+    {(surtitre || titre || chapeau) && (
+      <header
+        class:list={[
+          'mb-8 flex gap-6 sm:mb-12',
+          centre ? 'flex-col items-center text-center' : 'flex-wrap items-end justify-between',
+        ]}
+      >
+        <div class="max-w-3xl">
+          {surtitre && <p class="surtitre">{surtitre}</p>}
+          {titre && (
+            <h2 class="mt-3 font-display text-3xl leading-tight font-medium text-ink-700 sm:text-5xl">
+              {titre}
+            </h2>
+          )}
+          {chapeau && <p class="mt-4 text-lg leading-relaxed text-ink-800">{chapeau}</p>}
+        </div>
+        <slot name="lien" />
       </header>
     )}
     <slot />

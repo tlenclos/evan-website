@@ -1,0 +1,43 @@
+---
+import type { PhotoRealisation } from '../data';
+
+/**
+ * Grille de photos de chantiers. Les photos et leurs légendes viennent de
+ * src/data/realisations.yaml. Un clic ouvre la photo en grand, sans JavaScript.
+ * La photo du milieu de chaque rangée est coiffée d'une arche.
+ */
+interface Props {
+  photos: PhotoRealisation[];
+}
+
+const { photos } = Astro.props;
+---
+
+<ul class="grid grid-cols-2 gap-x-3 gap-y-6 sm:gap-x-6 sm:gap-y-10 lg:grid-cols-3">
+  {photos.map((photo, index) => (
+    <li>
+      <figure>
+        <a href={`/images/realisations/${photo.fichier}`} class="group relative block">
+          <img
+            src={`/images/realisations/${photo.fichier}`}
+            alt={photo.legende}
+            loading="lazy"
+            decoding="async"
+            class:list={[
+              'aspect-4/5 w-full bg-ink-100 object-cover transition-opacity group-hover:opacity-90',
+              index % 3 === 1 ? 'rounded-arch' : 'rounded-card',
+            ]}
+          />
+          {photo.etiquette && (
+            <span class="absolute top-3 left-3 rounded-button bg-ink-900 px-3.5 py-1.5 text-xs font-medium tracking-widest text-ink-50 uppercase sm:top-4 sm:left-4">
+              {photo.etiquette}
+            </span>
+          )}
+        </a>
+        <figcaption class="mt-3 leading-snug font-medium text-ink-900 sm:text-lg">
+          {photo.legende}
+        </figcaption>
+      </figure>
+    </li>
+  ))}
+</ul>
