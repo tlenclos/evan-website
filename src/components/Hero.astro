@@ -28,8 +28,6 @@ const {
   photoSecondaire,
   legendePhoto,
 } = Astro.props;
-
-const cheminPhoto = (fichier: string) => `/images/realisations/${fichier}`;
 ---
 
 <div class:list={['relative overflow-hidden', photo ? 'bg-surface' : 'bg-surface-muted']}>
@@ -66,13 +64,13 @@ const cheminPhoto = (fichier: string) => `/images/realisations/${fichier}`;
     {photo && (
       <div class="relative h-96 sm:h-150 lg:col-start-2 lg:row-span-2 lg:row-start-1">
         <img
-          src={cheminPhoto(photo)}
+          src={photo}
           alt={legendePhoto ?? ''}
           class="rounded-arch absolute top-0 right-0 aspect-4/5 w-3/4 object-cover sm:w-4/5"
         />
         {photoSecondaire && (
           <img
-            src={cheminPhoto(photoSecondaire)}
+            src={photoSecondaire}
             alt=""
             class="absolute bottom-0 left-0 size-36 rounded-full border-6 border-surface object-cover sm:size-56 sm:border-8"
           />

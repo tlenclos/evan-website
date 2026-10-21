@@ -1,6 +1,6 @@
 ---
 # Les lignes entre les deux --- règlent tous les textes de la page d'accueil.
-# Les photos se désignent par leur nom de fichier dans public/images/realisations/.
+# Les photos se désignent par leur adresse : '/images/realisations/nom-du-fichier.jpg'.
 titre: 'Accueil'
 description: 'EB Concept & Rénovation à Angoulême : électricité, plaquisterie, parquet, terrasses et pergolas en bois, multiservices. Travail soigné et sur mesure.'
 
@@ -13,8 +13,8 @@ hero:
     pergolas en bois, avec un travail soigné et sur mesure.
   ctaTexte: 'Voir les réalisations'
   ctaUrl: '/realisations/'
-  photo: 'meuble-tv-niches-eclairees.jpg'
-  photoSecondaire: 'terrasse-piscine-eclairage-nuit.jpg'
+  photo: '/images/realisations/meuble-tv-niches-eclairees.jpg'
+  photoSecondaire: '/images/realisations/terrasse-piscine-eclairage-nuit.jpg'
   legendePhoto: 'Niches en arche éclairées'
 
 # --- Les prestations (la liste vient de src/data/prestations.yaml)
@@ -31,11 +31,11 @@ chantierUne:
   texte: >-
     Pose de la structure, des lames, puis habillage du bassin : un seul
     interlocuteur du début à la fin.
-  photo: 'terrasse-piscine-terminee.jpg'
+  photo: '/images/realisations/terrasse-piscine-terminee.jpg'
   etapes:
-    - photo: 'terrasse-piscine-structure.jpg'
+    - photo: '/images/realisations/terrasse-piscine-structure.jpg'
       legende: '1 · Structure'
-    - photo: 'terrasse-piscine-terminee.jpg'
+    - photo: '/images/realisations/terrasse-piscine-terminee.jpg'
       legende: '2 · Terminée'
   bouton: 'Voir toutes les réalisations'
 
@@ -56,5 +56,5 @@ etapes:
 appel:
   titre: 'Un projet de terrasse, d’aménagement ou de rénovation ?'
   texte: 'Parlez-en à Evan : visite et devis gratuits.'
-  photo: 'pergola-bois.jpg'
+  photo: '/images/realisations/pergola-bois.jpg'
 ---

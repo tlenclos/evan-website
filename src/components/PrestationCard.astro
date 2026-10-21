@@ -14,7 +14,7 @@ const { titre, description, tarif, details, photo } = Astro.props;
 <article class="flex h-full flex-col overflow-hidden rounded-card border border-ink-200 bg-surface">
   {photo && (
     <img
-      src={`/images/realisations/${photo}`}
+      src={photo}
       alt=""
       loading="lazy"
       decoding="async"

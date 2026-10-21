@@ -8,17 +8,29 @@
 #  `src/content.config.ts`. Modifier un schéma impose de modifier ce fichier :
 #  sinon l'interface accepte une saisie que la construction refusera ensuite.
 #
-#  Attention : Pages CMS réécrit entièrement un fichier à l'enregistrement. Les
-#  commentaires (# …) des fichiers .yaml et .md disparaissent alors. Les
+#  Attention : à l'enregistrement, Pages CMS réécrit entièrement le fichier et
+#  SUPPRIME tout champ qui n'est pas décrit ici. Un champ ajouté à un schéma
+#  mais oublié dans ce fichier disparaît donc au premier enregistrement.
+#  Les commentaires (# …) des fichiers .yaml et .md disparaissent aussi : les
 #  consignes destinées à la personne qui édite vivent donc ici, dans les
 #  « description » des champs.
 # =============================================================================
 
 media:
-  input: public/images
-  output: /images
-  categories: [image]
-  rename: safe
+  - name: images
+    label: Images
+    input: public/images
+    output: /images
+    categories: [image]
+    rename: safe
+  # Les photos de chantiers. Le sélecteur enregistre leur adresse sur le site,
+  # par exemple /images/realisations/pergola-bois.jpg (voir `schemaPhoto`).
+  - name: realisations
+    label: Photos de chantiers
+    input: public/images/realisations
+    output: /images/realisations
+    categories: [image]
+    rename: safe
 
 settings:
   commit:
@@ -28,6 +40,16 @@ settings:
       update: 'Modifier {path} depuis Pages CMS'
       delete: 'Supprimer {path} depuis Pages CMS'
       rename: 'Renommer {oldPath} en {newPath} depuis Pages CMS'
+
+components:
+  photo:
+    label: Photo
+    description: >-
+      Choisissez une photo de chantier, ou déposez-en une nouvelle (1600 pixels
+      maximum sur le plus grand côté).
+    type: image
+    options:
+      media: realisations
 
 content:
   # --- Texte des pages : src/content/pages/*.md ------------------------------
@@ -66,6 +88,12 @@ content:
         description: Facultatif. Laissez tout vide pour ne pas afficher de bandeau.
         type: object
         fields:
+          - name: surtitre
+            label: Surtitre
+            description: >-
+              Petite ligne en capitales au-dessus du titre. Facultatif : sans
+              surtitre, le métier et la zone d'intervention s'affichent.
+            type: string
           - name: titre
             label: Titre du bandeau
             type: string
@@ -84,8 +112,139 @@ content:
               Adresse d'une page du site, avec le « / » au début et à la fin, par
               exemple /contact/
             type: string
+          - name: photo
+            component: photo
+            label: Photo principale
+            description: >-
+              Facultatif. Avec une photo, le bandeau passe sur deux colonnes :
+              texte à gauche, photo en arche à droite.
+          - name: photoSecondaire
+            component: photo
+            label: Petite photo ronde
+            description: >-
+              Facultatif. Affichée en médaillon devant la photo principale.
+              Sans photo principale, elle n'apparaît pas.
+          - name: legendePhoto
+            label: Légende de la photo
+            description: >-
+              Facultatif. Courte phrase posée sur la photo principale ; sert
+              aussi de description pour les personnes malvoyantes.
+            type: string
+      - name: savoirFaire
+        label: Bloc « Savoir-faire » (page d'accueil uniquement)
+        description: >-
+          Le titre au-dessus des cartes de prestations. Les cartes elles-mêmes se
+          modifient dans « Prestations ». Laissez tout vide pour masquer le bloc.
+        type: object
+        fields:
+          - name: surtitre
+            label: Surtitre
+            type: string
+            required: true
+          - name: titre
+            label: Titre
+            type: string
+            required: true
+          - name: lien
+            label: Texte du lien vers la page Prestations
+            type: string
+            required: true
+      - name: chantierUne
+        label: Bloc « Chantier à la une » (page d'accueil uniquement)
+        description: >-
+          Un chantier mis en avant, avec une grande photo et quelques étapes.
+          Laissez tout vide pour masquer le bloc.
+        type: object
+        fields:
+          - name: surtitre
+            label: Pastille sur la photo
+            description: Par exemple « Chantier à la une ».
+            type: string
+            required: true
+          - name: titre
+            label: Titre
+            type: string
+            required: true
+          - name: texte
+            label: Texte
+            type: text
+            required: true
+          - name: photo
+            component: photo
+            label: Grande photo
+            required: true
+          - name: etapes
+            label: Étapes en images
+            description: >-
+              Facultatif. Petites photos sous le texte, dans l'ordre de la liste.
+              Trois au maximum pour garder une seule rangée.
+            type: object
+            list:
+              collapsible:
+                collapsed: true
+                summary: '{legende}'
+            fields:
+              - name: photo
+                component: photo
+                required: true
+              - name: legende
+                label: Légende
+                description: Par exemple « 1 · Structure ».
+                type: string
+                required: true
+          - name: bouton
+            label: Texte du bouton vers les réalisations
+            type: string
+            required: true
+      - name: etapes
+        label: Bloc « Comment se passe un projet » (page d'accueil uniquement)
+        description: Les étapes numérotées. Laissez tout vide pour masquer le bloc.
+        type: object
+        fields:
+          - name: titre
+            label: Titre
+            type: string
+            required: true
+          - name: liste
+            label: Étapes
+            description: Dans l'ordre ; le numéro s'ajoute tout seul.
+            type: object
+            required: true
+            list:
+              min: 1
+              collapsible:
+                collapsed: true
+                summary: '{titre}'
+            fields:
+              - name: titre
+                label: Titre de l'étape
+                type: string
+                required: true
+              - name: texte
+                label: Texte
+                type: text
+                required: true
+      - name: appel
+        label: Bandeau d'appel au devis, en bas de page
+        description: >-
+          Utilisé sur l'accueil et sur Réalisations. Le bouton et le numéro de
+          téléphone s'ajoutent tout seuls. Laissez tout vide pour le masquer.
+        type: object
+        fields:
+          - name: titre
+            label: Titre
+            type: string
+            required: true
+          - name: texte
+            label: Texte
+            description: Facultatif.
+            type: string
+          - name: photo
+            component: photo
+            description: Facultatif. Affichée à droite du texte sur ordinateur.
       - name: body
         label: Contenu de la page
+        description: Le texte sous le bandeau. Inutilisé sur l'accueil et sur Réalisations.
         type: rich-text
         options:
           format: markdown
@@ -94,8 +253,8 @@ content:
   - name: site
     label: Réglages du site
     description: >-
-      Tout ce qui apparaît sur plusieurs pages : nom, coordonnées, horaires,
-      menu, pied de page.
+      Tout ce qui apparaît sur plusieurs pages : nom, logo, coordonnées,
+      horaires, menu, pied de page.
     type: file
     path: src/data/site.yaml
     format: yaml
@@ -104,16 +263,19 @@ content:
     fields:
       - name: nom
         label: Nom
-        description: Affiché en haut de toutes les pages.
+        description: Le nom de l'entreprise, repris dans le titre des pages et les mentions légales.
         type: string
         required: true
+      - name: logo
+        label: Logo
+        description: Affiché en haut de toutes les pages.
+        type: image
+        required: true
+        options:
+          media: images
       - name: metier
         label: Métier
-        type: string
-        required: true
-      - name: baseline
-        label: Accroche
-        description: Phrase courte affichée sous le nom.
+        description: Par exemple « Rénovation et aménagement ».
         type: string
         required: true
       - name: description
@@ -125,7 +287,12 @@ content:
         required: true
       - name: zone
         label: Zone d'intervention
-        description: Par exemple « Nantes et 40 km alentour ».
+        description: Par exemple « Angoulême et alentours ».
+        type: string
+        required: true
+      - name: formeJuridique
+        label: Forme juridique
+        description: Par exemple « EURL ». Affichée dans le pied de page et les mentions légales.
         type: string
         required: true
       - name: contact
@@ -168,6 +335,7 @@ content:
         label: Horaires
         description: Une ligne par plage horaire, dans l'ordre d'affichage.
         type: object
+        required: true
         list:
           min: 1
           collapsible:
@@ -212,6 +380,7 @@ content:
           réordonner les entrées ; pour ajouter une page, il faut aussi modifier
           le code : demandez-le.
         type: object
+        required: true
         list:
           min: 1
           collapsible:
@@ -280,6 +449,9 @@ content:
         label: Description
         type: text
         required: true
+      - name: photo
+        component: photo
+        description: Facultatif. Affichée en haut de la carte de la prestation.
       - name: tarif
         label: Tarif
         description: Facultatif. Par exemple « Sur devis » ou « À partir de 450 € ».
@@ -289,6 +461,106 @@ content:
         description: Facultatif. Une courte phrase par ligne.
         type: string
         list: true
+
+  # --- Réalisations : src/data/realisations.yaml -----------------------------
+  - name: realisations
+    label: Réalisations
+    description: >-
+      Les photos de chantiers : page Réalisations et mosaïque de la page
+      d'accueil. Sur la page Réalisations, les photos sont rangées par
+      catégorie, dans l'ordre de la liste.
+    type: file
+    path: src/data/realisations.yaml
+    format: yaml
+    operations:
+      delete: false
+    fields:
+      - name: apercuAccueil
+        label: Bloc « Réalisations » de la page d'accueil
+        description: Les textes autour de la mosaïque de photos.
+        type: object
+        required: true
+        fields:
+          - name: surtitre
+            label: Surtitre
+            type: string
+            required: true
+          - name: titre
+            label: Titre
+            type: string
+            required: true
+          - name: bouton
+            label: Texte du bouton vers la page Réalisations
+            type: string
+            required: true
+      - name: categories
+        label: Catégories
+        description: >-
+          Les rubriques de la page Réalisations, dans l'ordre d'affichage. Avant
+          de supprimer une catégorie, changez la catégorie de ses photos.
+        type: object
+        required: true
+        list:
+          min: 1
+          collapsible:
+            collapsed: true
+            summary: '{titre}'
+        fields:
+          - name: id
+            label: Identifiant
+            description: >-
+              Nom technique unique, en minuscules, sans accent ni espace, par
+              exemple exterieurs. C'est lui qu'on indique dans chaque photo.
+            type: string
+            required: true
+            pattern:
+              regex: '^[a-z0-9-]+$'
+              message: 'Minuscules, chiffres et tirets uniquement, par exemple exterieurs'
+          - name: titre
+            label: Titre affiché
+            type: string
+            required: true
+      - name: photos
+        label: Photos
+        type: object
+        required: true
+        list:
+          min: 1
+          collapsible:
+            collapsed: true
+            summary: '{legende}'
+        fields:
+          - name: fichier
+            component: photo
+            required: true
+          - name: legende
+            label: Légende
+            description: Affichée sous la photo ; sert aussi de description pour les personnes malvoyantes.
+            type: string
+            required: true
+          - name: categorie
+            label: Catégorie
+            description: >-
+              L'identifiant d'une des catégories ci-dessus, par exemple
+              exterieurs, interieurs ou renovation.
+            type: string
+            required: true
+          - name: etiquette
+            label: Pastille
+            description: Facultatif. Petit mot posé sur la photo, par exemple « Avant ».
+            type: string
+          - name: accueil
+            label: Place dans la mosaïque de l'accueil
+            description: >-
+              Facultatif : laissez vide pour ne pas la montrer sur l'accueil.
+              1 = grande photo en arche à gauche, 2 = large en haut au milieu,
+              3 = haute à droite, 4 et 5 = petites en bas au milieu. Une seule
+              photo par numéro.
+            type: number
+            options:
+              min: 1
+              max: 5
+              step: 1
 
   # --- Avis clients : src/data/temoignages.yaml ------------------------------
   - name: temoignages

@@ -75,6 +75,17 @@ se mettra pas à jour sans que la personne qui édite le sache.
 
 Comportements de Pages CMS à connaître :
 
+- Il **supprime tout champ absent de `.pages.yml`** : à l'enregistrement, le
+  formulaire passe par un `z.object()` généré depuis la configuration, qui
+  retire les clés inconnues, y compris dans les objets et les listes. Un champ
+  oublié dans `.pages.yml` disparaît donc au premier enregistrement — et si le
+  schéma Zod le rend obligatoire, le site cesse de se mettre à jour. Constaté
+  dans le code de Pages CMS (`app/api/[owner]/[repo]/[branch]/files/[path]/route.ts`,
+  dépôt `hunvreus/pagescms`, octobre 2026), puis reproduit en rejouant cette
+  étape en local sur un fichier de test (pas encore observé sur app.pagescms.org).
+  L'option `settings.content.merge: true` conserverait ces clés, mais elle
+  empêcherait aussi de vider un champ facultatif (l'ancienne valeur revient) et
+  ne s'applique pas aux listes : ne pas l'activer.
 - Il **réécrit entièrement** le fichier enregistré : les commentaires `#` des
   `.yaml` et du frontmatter disparaissent, et la mise en forme change. Les
   consignes pour l'éditeur vont donc dans les `description` de `.pages.yml`.
@@ -83,6 +94,12 @@ Comportements de Pages CMS à connaître :
   côté Zod — voir `reseaux`. Vider une liste à la racine (tous les avis
   supprimés) produit même un fichier **vide** : `valider()` le traite comme
   absent, d'où le `.default([])` de `schemaTemoignages`.
+- Son sélecteur d'images enregistre l'**adresse** de l'image
+  (`/images/realisations/pergola-bois.jpg`), jamais le seul nom de fichier :
+  une valeur qui ne commence pas par le dossier du média est refusée à
+  l'enregistrement. Les photos s'écrivent donc ainsi dans tout le contenu, et
+  `schemaPhoto` l'exige. Les champs photo de `.pages.yml` utilisent le
+  composant `photo`, rattaché au média `realisations`.
 - Il n'est pas possible d'y créer une page : `operations` l'interdit pour la
   collection `pages`, puisqu'une page exige aussi un fichier `.astro`.
 

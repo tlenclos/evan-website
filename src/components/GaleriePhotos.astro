@@ -17,9 +17,9 @@ const { photos } = Astro.props;
   {photos.map((photo, index) => (
     <li>
       <figure>
-        <a href={`/images/realisations/${photo.fichier}`} class="group relative block">
+        <a href={photo.fichier} class="group relative block">
           <img
-            src={`/images/realisations/${photo.fichier}`}
+            src={photo.fichier}
             alt={photo.legende}
             loading="lazy"
             decoding="async"

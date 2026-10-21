@@ -9,14 +9,15 @@
 #  Pour supprimer une prestation : effacez son bloc complet.
 #
 #  Les champs « tarif », « details » et « photo » sont facultatifs.
-#  « photo » : nom d'un fichier de public/images/realisations/.
+#  « photo » : adresse d'une photo de public/images/realisations/, par exemple
+#  '/images/realisations/salon-arche.jpg'.
 # =============================================================================
 
 # TODO : descriptions rédigées à partir du pitch d'Evan, à relire avec lui.
 # Ajoutez un « tarif » (ex. 'Sur devis') si vous souhaitez en afficher un.
 
 - id: electricite
-  photo: 'meuble-tv-niches-eclairees.jpg'
+  photo: '/images/realisations/meuble-tv-niches-eclairees.jpg'
   titre: 'Électricité générale'
   description: >-
     Installation, rénovation et mise aux normes de l'électricité, de la
@@ -27,7 +28,7 @@
     - 'Remplacement de tableau électrique'
 
 - id: plaquisterie
-  photo: 'chambre-niche-arche.jpg'
+  photo: '/images/realisations/chambre-niche-arche.jpg'
   titre: 'Plaquisterie'
   description: >-
     Cloisons, doublages et faux plafonds en plaques de plâtre, jusqu'aux
@@ -38,7 +39,7 @@
     - 'Niches et arches sur mesure'
 
 - id: parquet
-  photo: 'salon-arche.jpg'
+  photo: '/images/realisations/salon-arche.jpg'
   titre: 'Parquet'
   description: >-
     Pose de parquet massif, contrecollé ou stratifié, avec les plinthes et
@@ -49,7 +50,7 @@
     - 'Plinthes et barres de seuil'
 
 - id: terrasses-pergolas
-  photo: 'terrasse-bois-piscine-1.jpg'
+  photo: '/images/realisations/terrasse-bois-piscine-1.jpg'
   titre: 'Terrasses et pergolas en bois'
   description: >-
     Terrasses en bois, tours de piscine et pergolas, conçues et posées sur
@@ -60,7 +61,7 @@
     - 'Pergolas en bois massif'
 
 - id: multiservices
-  photo: 'habillage-escalier.jpg'
+  photo: '/images/realisations/habillage-escalier.jpg'
   titre: 'Travaux multiservices'
   description: >-
     Les petits et moyens travaux de la maison, avec le même soin qu'un

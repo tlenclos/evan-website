@@ -28,8 +28,8 @@ Trois façons de faire une modification :
 1. Ouvrez **https://app.pagescms.org** et connectez-vous avec l'adresse e-mail à
    laquelle vous avez reçu l'invitation.
 2. Choisissez le site, puis dans le menu de gauche ce que vous voulez modifier :
-   **Pages**, **Réglages du site**, **Prestations**, **Avis clients** ou
-   **Médias** (les photos).
+   **Pages**, **Réglages du site**, **Prestations**, **Réalisations**,
+   **Avis clients**, ou les photos (**Images** et **Photos de chantiers**).
 3. Modifiez, puis cliquez sur **Save**. Le site se met à jour une à deux minutes
    plus tard.
 
@@ -37,8 +37,10 @@ Sous chaque champ, une ligne d'aide indique ce qu'il faut y mettre. Un champ mal
 rempli est signalé en rouge et n'est pas enregistré.
 
 Créer ou supprimer une **page** n'est pas possible depuis l'interface : il faut
-aussi modifier le code, demandez-le à Claude. Les prestations et les avis, eux,
-s'ajoutent, se suppriment et se réordonnent librement.
+aussi modifier le code, demandez-le à Claude. Les prestations, les photos de
+chantiers et les avis, eux, s'ajoutent, se suppriment et se réordonnent
+librement. Un champ photo ouvre la liste des photos de chantiers : choisissez-en
+une, ou déposez-en une nouvelle depuis ce même écran.
 
 ---
 
@@ -88,7 +90,11 @@ problème.
    redimensionnez-la à 1600 pixels maximum avant de l'envoyer.
 4. Demandez ensuite où la faire apparaître sur le site. Pour une photo de
    chantier : déposez-la dans `public/images/realisations/` et ajoutez un bloc
-   dans `src/data/realisations.yaml`.
+   dans `src/data/realisations.yaml`, avec son adresse :
+   `fichier: '/images/realisations/nom-de-la-photo.jpg'`.
+
+Plus simple : dans l'interface d'édition, ouvrez **Réalisations**, ajoutez une
+ligne à la liste **Photos** et déposez la photo directement dans son champ.
 
 ---
 
