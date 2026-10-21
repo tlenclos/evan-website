@@ -1,7 +1,7 @@
 import { defineCollection } from 'astro:content';
 import { z } from 'astro/zod';
 import { glob } from 'astro/loaders';
-import { schemaNomPhoto } from './data';
+import { schemaPhoto } from './data';
 
 /**
  * Déclaration du contenu rédactionnel du site.
@@ -14,7 +14,7 @@ import { schemaNomPhoto } from './data';
  * Les listes (prestations, avis clients, photos) ne sont pas ici mais dans
  * `src/data/`, afin que l'ordre d'écriture dans le fichier soit l'ordre d'affichage.
  *
- * Les photos se désignent par leur nom de fichier dans public/images/realisations/.
+ * Les photos se désignent par leur adresse : /images/realisations/nom-du-fichier.jpg.
  */
 const pages = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/pages' }),
@@ -29,8 +29,8 @@ const pages = defineCollection({
         texte: z.string(),
         ctaTexte: z.string().optional(),
         ctaUrl: z.string().optional(),
-        photo: schemaNomPhoto.optional(),
-        photoSecondaire: schemaNomPhoto.optional(),
+        photo: schemaPhoto.optional(),
+        photoSecondaire: schemaPhoto.optional(),
         legendePhoto: z.string().optional(),
       })
       .optional(),
@@ -39,7 +39,7 @@ const pages = defineCollection({
       .object({
         titre: z.string(),
         texte: z.string().optional(),
-        photo: schemaNomPhoto.optional(),
+        photo: schemaPhoto.optional(),
       })
       .optional(),
     // Blocs propres à la page d'accueil.
@@ -49,8 +49,9 @@ const pages = defineCollection({
         surtitre: z.string(),
         titre: z.string(),
         texte: z.string(),
-        photo: schemaNomPhoto,
-        etapes: z.array(z.object({ photo: schemaNomPhoto, legende: z.string() })),
+        photo: schemaPhoto,
+        // Pages CMS supprime une liste vide à l'enregistrement : la clé peut donc manquer.
+        etapes: z.array(z.object({ photo: schemaPhoto, legende: z.string() })).default([]),
         bouton: z.string(),
       })
       .optional(),

@@ -30,7 +30,7 @@ function valider<T>(schema: z.ZodType<T>, contenu: string, nomFichier: string): 
       .join('\n');
     throw new Error(
       `Le fichier src/data/${nomFichier} est mal rempli :\n${details}\n\n` +
-        `Corrigez ces champs puis relancez. Voir les commentaires du fichier pour le format attendu.`,
+        `Corrigez ces champs puis relancez. Le format attendu est décrit dans les commentaires du fichier et sous chaque champ de l'interface d'édition.`,
     );
   }
 
@@ -40,13 +40,16 @@ function valider<T>(schema: z.ZodType<T>, contenu: string, nomFichier: string): 
 // Une faute de frappe dans un nom d'image afficherait une image cassée : on la refuse.
 const imageExistante = (cheminPublic: string) => existsSync(`public${cheminPublic}`);
 
-// Nom d'une photo de public/images/realisations/, utilisable dans tous les fichiers de contenu.
-export const schemaNomPhoto = z
+// Photo de chantier, désignée par son adresse sur le site : /images/realisations/nom.jpg.
+// C'est la forme qu'écrit le sélecteur d'images de Pages CMS.
+export const schemaPhoto = z
   .string()
-  .refine(
-    (fichier) => imageExistante(`/images/realisations/${fichier}`),
-    'fichier introuvable dans public/images/realisations/',
-  );
+  .startsWith('/images/realisations/', {
+    message:
+      'doit commencer par /images/realisations/, par exemple /images/realisations/pergola-bois.jpg',
+    abort: true,
+  })
+  .refine(imageExistante, 'fichier introuvable dans public/images/realisations/');
 
 // --- Réglages généraux : src/data/site.yaml ---------------------------------
 const schemaSite = z.object({
@@ -92,7 +95,7 @@ const schemaPrestations = z
       description: z.string().min(1),
       tarif: z.string().optional(),
       details: z.array(z.string()).optional(),
-      photo: schemaNomPhoto.optional(),
+      photo: schemaPhoto.optional(),
     }),
   )
   .min(1);
@@ -117,11 +120,11 @@ const schemaRealisations = z
       titre: z.string().min(1),
       bouton: z.string().min(1),
     }),
-    categories: z.array(z.object({ id: z.string().min(1), titre: z.string().min(1) })).min(1),
+    categories: z.array(z.object({ id: identifiant, titre: z.string().min(1) })).min(1),
     photos: z
       .array(
         z.object({
-          fichier: schemaNomPhoto,
+          fichier: schemaPhoto,
           legende: z.string().min(1),
           categorie: z.string().min(1),
           etiquette: z.string().optional(),

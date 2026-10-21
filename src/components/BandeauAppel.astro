@@ -25,7 +25,7 @@ const { titre, texte, photo } = Astro.props;
     {photo && (
       <div class="relative h-52 lg:order-2 lg:h-auto lg:min-h-105">
         <img
-          src={`/images/realisations/${photo}`}
+          src={photo}
           alt=""
           loading="lazy"
           decoding="async"
