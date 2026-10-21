@@ -20,7 +20,9 @@ import contenuRealisations from './realisations.yaml?raw';
  */
 
 function valider<T>(schema: z.ZodType<T>, contenu: string, nomFichier: string): T {
-  const resultat = schema.safeParse(chargerYaml(contenu));
+  // Pages CMS écrit un fichier vide quand on supprime le dernier élément d'une liste.
+  const donnees = contenu.trim() === '' ? undefined : chargerYaml(contenu);
+  const resultat = schema.safeParse(donnees);
 
   if (!resultat.success) {
     const details = resultat.error.issues
@@ -56,22 +58,36 @@ const schemaSite = z.object({
   formeJuridique: z.string().min(1),
   contact: z.object({
     email: z.email(),
-    telephone: z.string().min(1),
+    telephone: z
+      .string()
+      .regex(/^\+[0-9]{6,15}$/, 'format international sans espace, par exemple +33612345678'),
     telephoneAffiche: z.string().min(1),
     adresse: z.string().min(1),
     siret: z.string().min(1),
   }),
   horaires: z.array(z.object({ jour: z.string(), heures: z.string() })).min(1),
-  reseaux: z.array(z.object({ nom: z.string(), url: z.url() })),
-  menu: z.array(z.object({ texte: z.string(), url: z.string() })).min(1),
+  // Pages CMS supprime une liste vide à l'enregistrement : la clé peut donc manquer.
+  reseaux: z.array(z.object({ nom: z.string(), url: z.url() })).default([]),
+  menu: z
+    .array(
+      z.object({
+        texte: z.string(),
+        url: z
+          .string()
+          .regex(/^\/([a-z0-9-]+\/)*$/, 'doit commencer et finir par /, par exemple /contact/'),
+      }),
+    )
+    .min(1),
   ctaPrincipal: z.object({ texte: z.string(), url: z.string() }),
 });
+
+const identifiant = z.string().regex(/^[a-z0-9-]+$/, 'minuscules, chiffres et tirets uniquement');
 
 // --- Prestations : src/data/prestations.yaml --------------------------------
 const schemaPrestations = z
   .array(
     z.object({
-      id: z.string().min(1),
+      id: identifiant,
       titre: z.string().min(1),
       description: z.string().min(1),
       tarif: z.string().optional(),
@@ -82,14 +98,16 @@ const schemaPrestations = z
   .min(1);
 
 // --- Avis clients : src/data/temoignages.yaml -------------------------------
-const schemaTemoignages = z.array(
-  z.object({
-    id: z.string().min(1),
-    texte: z.string().min(1),
-    auteur: z.string().min(1),
-    lieu: z.string().optional(),
-  }),
-);
+const schemaTemoignages = z
+  .array(
+    z.object({
+      id: identifiant,
+      texte: z.string().min(1),
+      auteur: z.string().min(1),
+      lieu: z.string().optional(),
+    }),
+  )
+  .default([]);
 
 // --- Réalisations : src/data/realisations.yaml -----------------------------
 const schemaRealisations = z

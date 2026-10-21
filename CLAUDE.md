@@ -61,6 +61,39 @@ correspondante au schéma** : c'est ce qui protège la personne qui édite.
 
 ---
 
+## Interface d'édition (Pages CMS)
+
+`.pages.yml`, à la racine, décrit les formulaires de
+[Pages CMS](https://pagescms.org). Chaque enregistrement y crée un commit sur
+`main`, que Coolify déploie comme n'importe quel autre envoi.
+
+**`.pages.yml` doit suivre les schémas Zod.** Tout champ ajouté, renommé ou
+rendu obligatoire dans `src/data/index.ts` ou `src/content.config.ts` doit
+l'être aussi dans `.pages.yml`, avec la même règle (`required`, `pattern`).
+Sinon l'interface accepte une saisie que `npm run check` refusera, et le site ne
+se mettra pas à jour sans que la personne qui édite le sache.
+
+Comportements de Pages CMS à connaître :
+
+- Il **réécrit entièrement** le fichier enregistré : les commentaires `#` des
+  `.yaml` et du frontmatter disparaissent, et la mise en forme change. Les
+  consignes pour l'éditeur vont donc dans les `description` de `.pages.yml`.
+- Il **supprime les clés vides**, y compris une liste vide. Un champ facultatif
+  côté Pages CMS doit être `.optional()` (ou `.default([])` pour une liste)
+  côté Zod — voir `reseaux`. Vider une liste à la racine (tous les avis
+  supprimés) produit même un fichier **vide** : `valider()` le traite comme
+  absent, d'où le `.default([])` de `schemaTemoignages`.
+- Il n'est pas possible d'y créer une page : `operations` l'interdit pour la
+  collection `pages`, puisqu'une page exige aussi un fichier `.astro`.
+
+Mise en place (une seule fois, par le propriétaire du dépôt) : se connecter à
+https://app.pagescms.org avec GitHub, installer l'application GitHub sur le
+dépôt `tlenclos/evan-website`, puis inviter la personne qui édite par e-mail
+depuis l'onglet **Collaborators** du projet. Elle n'a pas besoin de compte
+GitHub.
+
+---
+
 ## Recettes
 
 ### Modifier un texte

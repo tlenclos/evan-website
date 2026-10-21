@@ -13,12 +13,32 @@ Le contenu du site est rangé dans des fichiers texte, dans le dossier `src/`.
 Vous modifiez un fichier, vous enregistrez, et **le site se met à jour tout seul
 en une à deux minutes**.
 
-Deux façons de faire une modification :
+Trois façons de faire une modification :
 
-1. **Demander à Claude** — « change le numéro de téléphone », « ajoute une
-   prestation “pose de terrasse” », « remplace la photo d'accueil ». C'est la
-   voie la plus simple, et celle pour laquelle ce projet a été conçu.
-2. **Le faire soi-même sur github.com** — voir « Modifier un texte » ci-dessous.
+1. **Avec l'interface d'édition** — des formulaires pour chaque page, chaque
+   prestation et chaque avis. Voir ci-dessous.
+2. **Demander à Claude** — « change le numéro de téléphone », « ajoute une
+   prestation “pose de terrasse” », « remplace la photo d'accueil ».
+3. **Le faire soi-même sur github.com** — voir « Modifier un texte » ci-dessous.
+
+---
+
+## L'interface d'édition
+
+1. Ouvrez **https://app.pagescms.org** et connectez-vous avec l'adresse e-mail à
+   laquelle vous avez reçu l'invitation.
+2. Choisissez le site, puis dans le menu de gauche ce que vous voulez modifier :
+   **Pages**, **Réglages du site**, **Prestations**, **Avis clients** ou
+   **Médias** (les photos).
+3. Modifiez, puis cliquez sur **Save**. Le site se met à jour une à deux minutes
+   plus tard.
+
+Sous chaque champ, une ligne d'aide indique ce qu'il faut y mettre. Un champ mal
+rempli est signalé en rouge et n'est pas enregistré.
+
+Créer ou supprimer une **page** n'est pas possible depuis l'interface : il faut
+aussi modifier le code, demandez-le à Claude. Les prestations et les avis, eux,
+s'ajoutent, se suppriment et se réordonnent librement.
 
 ---
 
@@ -38,8 +58,9 @@ Deux façons de faire une modification :
 | Les fichiers photo et le logo                           | dossier `public/images/`            |
 | Les couleurs et les polices                             | `src/styles/global.css`             |
 
-Chacun de ces fichiers commence par des explications en commentaire. Les mentions
-**`TODO`** signalent les valeurs d'exemple qui restent à remplacer par les vraies.
+Tant qu'ils n'ont pas été enregistrés depuis l'interface d'édition, ces fichiers
+commencent par des explications en commentaire. Les mentions **`TODO`**
+signalent les valeurs d'exemple qui restent à remplacer par les vraies.
 
 ---
 
