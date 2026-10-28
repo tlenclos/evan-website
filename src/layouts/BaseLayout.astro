@@ -1,6 +1,8 @@
 ---
+import { getImage } from 'astro:assets';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import { imagePhoto } from '../components/photos';
 import { site } from '../data';
 import '@fontsource-variable/jost/index.css';
 import '../styles/global.css';
@@ -18,20 +20,45 @@ interface Props {
 
 const { titre, description = site.description, noindex = false } = Astro.props;
 
-const titreComplet = `${titre} — ${site.nom}, ${site.metier}`;
+// Google coupe les titres au-delà d'environ 60 caractères.
+const titreComplet = `${titre} — ${site.nom}`;
 const urlCanonique = new URL(Astro.url.pathname, Astro.site);
+const urlSite = new URL('/', Astro.site);
+
+// Aperçu affiché quand un lien est partagé : format 1200 × 630 attendu par Facebook et WhatsApp.
+const photoPartage = await getImage({
+  src: imagePhoto(site.photoPartage),
+  width: 1200,
+  height: 630,
+  fit: 'cover',
+  format: 'jpg',
+});
+const urlPhotoPartage = new URL(photoPartage.src, Astro.site);
+
+// Le schéma de site.yaml impose « rue, code postal ville ».
+const [, rue, codePostal, ville] = site.contact.adresse.match(/^(.+),\s*(\d{5})\s+(.+)$/) ?? [];
 
 // Fiche d'entreprise pour Google (affichage enrichi dans les résultats de recherche).
 const donneesStructurees = {
   '@context': 'https://schema.org',
-  '@type': 'LocalBusiness',
+  '@type': 'HomeAndConstructionBusiness',
+  '@id': `${urlSite}#entreprise`,
   name: site.nom,
   description: site.description,
+  url: urlSite.toString(),
+  logo: new URL(site.logo, Astro.site).toString(),
+  image: urlPhotoPartage.toString(),
   telephone: site.contact.telephone,
   email: site.contact.email,
-  address: { '@type': 'PostalAddress', streetAddress: site.contact.adresse },
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: rue,
+    postalCode: codePostal,
+    addressLocality: ville,
+    addressCountry: 'FR',
+  },
   areaServed: site.zone,
-  url: Astro.site?.toString(),
+  sameAs: site.reseaux.map((reseau) => reseau.url),
 };
 
 // « @ » écrit \u0040 : Google lit la même adresse, les robots à spam ne la reconnaissent pas.
@@ -52,10 +79,15 @@ const donneesStructureesJson = JSON.stringify(donneesStructurees).replace(
     {noindex && <meta name="robots" content="noindex, nofollow" />}
 
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={site.nom} />
     <meta property="og:title" content={titreComplet} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={urlCanonique} />
     <meta property="og:locale" content="fr_FR" />
+    <meta property="og:image" content={urlPhotoPartage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={`${site.nom}, ${site.metier}`} />
     <meta name="twitter:card" content="summary_large_image" />
 
     <link rel="icon" href="/favicon.ico" sizes="32x32" />

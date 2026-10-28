@@ -19,6 +19,9 @@ logo: '/images/logo.png'
 metier: 'Rénovation et aménagement'
 description: 'EB Concept & Rénovation, à Angoulême : électricité générale, plaquisterie, parquet, terrasses et pergolas en bois, travaux multiservices.' # résumé affiché par Google, 150-160 caractères
 zone: 'Angoulême et alentours' # TODO : préciser le rayon d'intervention
+# Photo affichée quand un lien du site est partagé (WhatsApp, Facebook, SMS…).
+# Elle est recadrée au format paysage 1200 × 630 : choisir une photo en largeur.
+photoPartage: '/images/realisations/meuble-tv-niches-eclairees.jpg'
 
 # --- Entreprise ------------------------------------------------------------------
 # Affiché sur la page « Mentions légales ».
@@ -30,6 +33,7 @@ contact:
   # « telephone » sert au lien cliquable, « telephoneAffiche » à l'affichage.
   telephone: '+33622810551'
   telephoneAffiche: '06 22 81 05 51'
+  # Toujours sous la forme « rue, code postal ville » : Google en a besoin.
   adresse: '17 rue Angel Albert, 16000 Angoulême'
   siret: '130 424 914 00013'
 

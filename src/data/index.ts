@@ -66,6 +66,7 @@ const schemaSite = z.object({
   metier: z.string().min(1),
   description: z.string().min(1),
   zone: z.string().min(1),
+  photoPartage: schemaPhoto,
   formeJuridique: z.string().min(1),
   contact: z.object({
     email: z.email(),
@@ -73,7 +74,12 @@ const schemaSite = z.object({
       .string()
       .regex(/^\+[0-9]{6,15}$/, 'format international sans espace, par exemple +33612345678'),
     telephoneAffiche: z.string().min(1),
-    adresse: z.string().min(1),
+    adresse: z
+      .string()
+      .regex(
+        /^.+,\s*\d{5}\s+\S.*$/,
+        'format « rue, code postal ville », par exemple 17 rue Angel Albert, 16000 Angoulême',
+      ),
     siret: z.string().min(1),
   }),
   horaires: z.array(z.object({ jour: z.string(), heures: z.string() })).min(1),
