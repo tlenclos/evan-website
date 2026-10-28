@@ -87,7 +87,9 @@ quel champ posent problème.
 1. Ouvrez le dossier `public/images/` sur github.com.
 2. **Add file → Upload files**, puis déposez votre photo.
 3. Nommez-la sans accent ni espace, par exemple `terrasse-angouleme.jpg`, et
-   redimensionnez-la à 1600 pixels maximum avant de l'envoyer.
+   envoyez-la telle quelle si elle fait 2048 pixels ou moins sur le plus grand
+   côté (sinon, réduisez-la à 2048 pixels). Chaque réduction ou recompression
+   la rend plus floue.
 4. Demandez ensuite où la faire apparaître sur le site. Pour une photo de
    chantier : déposez-la dans `public/images/realisations/` et ajoutez un bloc
    dans `src/data/realisations.yaml`, avec son adresse :

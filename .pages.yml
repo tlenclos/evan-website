@@ -45,8 +45,9 @@ components:
   photo:
     label: Photo
     description: >-
-      Choisissez une photo de chantier, ou déposez-en une nouvelle (1600 pixels
-      maximum sur le plus grand côté).
+      Choisissez une photo de chantier, ou déposez-en une nouvelle (2048 pixels
+      maximum sur le plus grand côté). Envoyez la photo d'origine, sans la
+      réduire ni la recompresser : chaque passage la rend plus floue.
     type: image
     options:
       media: realisations
