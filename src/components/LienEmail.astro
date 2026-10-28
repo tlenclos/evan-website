@@ -1,0 +1,25 @@
+---
+import { site } from '../data';
+
+/**
+ * Lien vers l'adresse e-mail du site, masquée aux robots qui collectent les
+ * adresses pour envoyer du spam. Sans JavaScript : l'adresse est encodée
+ * caractère par caractère dans le code HTML, le navigateur l'affiche
+ * normalement et le lien fonctionne.
+ */
+interface Props {
+  class?: string;
+}
+
+const { class: classe } = Astro.props;
+
+const caracteres = [...site.contact.email];
+const adresseEncodee = caracteres
+  .map((c) => `%${c.charCodeAt(0).toString(16).padStart(2, '0')}`)
+  .join('');
+const texteEncode = caracteres.map((c) => `&#${c.charCodeAt(0)};`).join('');
+---
+
+<a href={`mailto:${adresseEncodee}`} class={classe}>
+  <Fragment set:html={texteEncode} />
+</a>

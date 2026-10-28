@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Section from '../components/Section.astro';
+import LienEmail from '../components/LienEmail.astro';
 import { site } from '../data';
 
 // Page obligatoire en France. Les informations viennent de src/data/site.yaml.
@@ -23,7 +24,7 @@ import { site } from '../data';
         <br />
         Téléphone : {site.contact.telephoneAffiche}
         <br />
-        E-mail : {site.contact.email}
+        E-mail : <LienEmail />
       </p>
 
       <h2>Hébergement</h2>

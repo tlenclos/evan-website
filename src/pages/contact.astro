@@ -3,6 +3,7 @@ import { getEntry, render } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Hero from '../components/Hero.astro';
 import Section from '../components/Section.astro';
+import LienEmail from '../components/LienEmail.astro';
 import { site } from '../data';
 
 // Le texte de cette page se modifie dans src/content/pages/contact.md
@@ -39,12 +40,7 @@ const { Content } = await render(page);
             <div>
               <dt class="font-semibold text-ink-900">E-mail</dt>
               <dd class="mt-1">
-                <a
-                  href={`mailto:${site.contact.email}`}
-                  class="break-all text-brand-700 underline underline-offset-2"
-                >
-                  {site.contact.email}
-                </a>
+                <LienEmail class="break-all text-brand-700 underline underline-offset-2" />
               </dd>
             </div>
             <div>

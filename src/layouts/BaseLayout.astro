@@ -33,6 +33,12 @@ const donneesStructurees = {
   areaServed: site.zone,
   url: Astro.site?.toString(),
 };
+
+// « @ » écrit \u0040 : Google lit la même adresse, les robots à spam ne la reconnaissent pas.
+const donneesStructureesJson = JSON.stringify(donneesStructurees).replace(
+  site.contact.email,
+  site.contact.email.replace('@', '\\u0040'),
+);
 ---
 
 <!doctype html>
@@ -60,11 +66,7 @@ const donneesStructurees = {
     <meta name="theme-color" content="#ece8e7" />
     <link rel="sitemap" href="/sitemap-index.xml" />
 
-    <script
-      type="application/ld+json"
-      set:html={JSON.stringify(donneesStructurees)}
-      is:inline
-    ></script>
+    <script type="application/ld+json" set:html={donneesStructureesJson} is:inline></script>
   </head>
 
   <body class="flex min-h-screen flex-col">
