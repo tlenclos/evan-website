@@ -9,7 +9,7 @@
 #  Pour supprimer une prestation : effacez son bloc complet.
 #
 #  Les champs « tarif », « details » et « photo » sont facultatifs.
-#  « photo » : adresse d'une photo de public/images/realisations/, par exemple
+#  « photo » : adresse d'une photo de src/assets/realisations/, par exemple
 #  '/images/realisations/salon-arche.jpg'.
 # =============================================================================
 

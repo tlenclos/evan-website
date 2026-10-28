@@ -14,4 +14,7 @@ Conseils :
 Une image déposée ici est accessible à l'adresse `/images/nom-du-fichier.jpg`.
 
 - `logo.png` : le logo affiché en haut du site (réglé dans `src/data/site.yaml`).
-- `realisations/` : les photos de chantiers, listées dans `src/data/realisations.yaml`.
+  Les photos de chantiers ne sont pas ici mais dans `src/assets/realisations/` : le
+  site en produit des versions allégées, à la taille de chaque emplacement. Elles
+  gardent pourtant l'adresse `/images/realisations/nom-du-fichier.jpg` dans le
+  contenu, et sont listées dans `src/data/realisations.yaml`.

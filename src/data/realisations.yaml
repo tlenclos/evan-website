@@ -6,8 +6,8 @@
 #  de ce fichier.
 #
 #  Pour ajouter une photo :
-#    1. déposez-la dans public/images/realisations/ (nom sans accent ni espace,
-#       1600 pixels maximum sur le plus grand côté) ;
+#    1. déposez-la dans src/assets/realisations/ (nom sans accent ni espace,
+#       2048 pixels maximum sur le plus grand côté, sans la recompresser) ;
 #    2. copiez un bloc ci-dessous et changez « fichier » (l'adresse de la
 #       photo : '/images/realisations/nom-du-fichier.jpg'), « legende » et
 #       « categorie » (l'un des « id » de la liste des catégories).

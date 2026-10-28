@@ -25,9 +25,11 @@ media:
     rename: safe
   # Les photos de chantiers. Le sélecteur enregistre leur adresse sur le site,
   # par exemple /images/realisations/pergola-bois.jpg (voir `schemaPhoto`).
+  # Les fichiers sont rangés dans src/assets/ : le site en produit à la
+  # construction des versions allégées, à la taille de chaque emplacement.
   - name: realisations
     label: Photos de chantiers
-    input: public/images/realisations
+    input: src/assets/realisations
     output: /images/realisations
     categories: [image]
     rename: safe

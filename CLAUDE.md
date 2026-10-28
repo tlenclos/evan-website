@@ -37,7 +37,7 @@ src/
 │   ├── site.yaml      identité, menu, coordonnées, horaires, réseaux
 │   ├── prestations.yaml
 │   ├── temoignages.yaml
-│   └── realisations.yaml  photos de chantiers (fichiers dans public/images/realisations/)
+│   └── realisations.yaml  photos de chantiers (fichiers dans src/assets/realisations/)
 ├── content/pages/   TEXTE DES PAGES (Markdown) — un fichier = une page
 ├── content.config.ts  schéma du frontmatter des pages
 ├── components/      briques réutilisables
@@ -99,7 +99,9 @@ Comportements de Pages CMS à connaître :
   une valeur qui ne commence pas par le dossier du média est refusée à
   l'enregistrement. Les photos s'écrivent donc ainsi dans tout le contenu, et
   `schemaPhoto` l'exige. Les champs photo de `.pages.yml` utilisent le
-  composant `photo`, rattaché au média `realisations`.
+  composant `photo`, rattaché au média `realisations`. Ce média range les
+  fichiers dans `src/assets/realisations/` (`input`) tout en écrivant l'adresse
+  `/images/realisations/…` (`output`) : voir « Photos » ci-dessous.
 - Il n'est pas possible d'y créer une page : `operations` l'interdit pour la
   collection `pages`, puisqu'une page exige aussi un fichier `.astro`.
 
@@ -108,6 +110,22 @@ https://app.pagescms.org avec GitHub, installer l'application GitHub sur le
 dépôt `tlenclos/evan-website`, puis inviter la personne qui édite par e-mail
 depuis l'onglet **Collaborators** du projet. Elle n'a pas besoin de compte
 GitHub.
+
+---
+
+## Photos
+
+Les photos de chantiers vivent dans `src/assets/realisations/`, pas dans
+`public/` : Astro en produit à la construction des versions WebP en plusieurs
+largeurs. Le contenu continue de les désigner par `/images/realisations/nom.jpg`,
+que `src/components/photos.ts` relie au fichier.
+
+Toute photo s'affiche via `<Photo adresse=… cadres=… />`, jamais `<img>`.
+`cadres` décrit la taille de l'emplacement pour chaque largeur d'écran (mêmes
+paliers que les classes `sm:`/`lg:` du composant) ; le composant en déduit
+l'attribut `sizes`, en tenant compte du rognage d'`object-cover`. En modifiant
+la mise en page d'une zone photo, mettre ses `cadres` à jour, puis vérifier au
+navigateur que `currentSrc` est au moins aussi large que l'image affichée × 2.
 
 ---
 

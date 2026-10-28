@@ -91,7 +91,7 @@ quel champ posent problème.
    côté (sinon, réduisez-la à 2048 pixels). Chaque réduction ou recompression
    la rend plus floue.
 4. Demandez ensuite où la faire apparaître sur le site. Pour une photo de
-   chantier : déposez-la dans `public/images/realisations/` et ajoutez un bloc
+   chantier : déposez-la dans `src/assets/realisations/` et ajoutez un bloc
    dans `src/data/realisations.yaml`, avec son adresse :
    `fichier: '/images/realisations/nom-de-la-photo.jpg'`.
 

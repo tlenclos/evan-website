@@ -6,6 +6,8 @@ import Section from '../components/Section.astro';
 import Button from '../components/Button.astro';
 import PrestationCard from '../components/PrestationCard.astro';
 import BandeauAppel from '../components/BandeauAppel.astro';
+import Photo from '../components/Photo.astro';
+import type { Cadre } from '../components/photos';
 import { prestations, temoignages, realisations } from '../data';
 
 // Tous les textes de cette page se modifient dans src/content/pages/accueil.md
@@ -18,14 +20,69 @@ const photosMosaique = realisations.photos
   .filter((photo) => photo.accueil !== undefined)
   .sort((a, b) => (a.accueil ?? 0) - (b.accueil ?? 0));
 
-// Sur mobile (2 colonnes) comme sur ordinateur (4 colonnes), chaque place a sa forme.
-const formesMosaique = [
-  'row-span-2 rounded-arch',
-  'col-span-2 rounded-card',
-  'rounded-card lg:row-span-2',
-  'rounded-card',
-  'col-span-2 rounded-card lg:col-span-1',
+const cadresChantierUne: Cadre[] = [
+  { ecranMin: 1152, largeur: 614, hauteur: 640 },
+  { ecranMin: 1024, largeur: [58.33, -58.33], hauteur: 640 },
+  { ecranMin: 640, largeur: [100, -80], hauteur: 640 },
+  { largeur: [100, -32], hauteur: 440 },
 ];
+const cadresEtape: Cadre[] = [
+  { ecranMin: 1152, largeur: 135, hauteur: 140 },
+  { ecranMin: 1024, largeur: [13.89, -24.56], hauteur: 140 },
+  { ecranMin: 640, largeur: [33.33, -34.67], hauteur: 140 },
+  { largeur: [33.33, -18.67], hauteur: 100 },
+];
+
+// Sur mobile (2 colonnes) comme sur ordinateur (4 colonnes), chaque place a sa forme.
+const formesMosaique: { classe: string; cadres: Cadre[] }[] = [
+  {
+    classe: 'row-span-2 rounded-arch',
+    cadres: [
+      { ecranMin: 1152, largeur: 253, hauteur: 540 },
+      { ecranMin: 1024, largeur: [25, -35], hauteur: 540 },
+      { ecranMin: 640, largeur: [50, -50], hauteur: 340 },
+      { largeur: [50, -21], hauteur: 330 },
+    ],
+  },
+  {
+    classe: 'col-span-2 rounded-card',
+    cadres: [
+      { ecranMin: 1152, largeur: 526, hauteur: 260 },
+      { ecranMin: 1024, largeur: [50, -50], hauteur: 260 },
+      { ecranMin: 640, largeur: [100, -80], hauteur: 160 },
+      { largeur: [100, -32], hauteur: 160 },
+    ],
+  },
+  {
+    classe: 'rounded-card lg:row-span-2',
+    cadres: [
+      { ecranMin: 1152, largeur: 253, hauteur: 540 },
+      { ecranMin: 1024, largeur: [25, -35], hauteur: 540 },
+      { ecranMin: 640, largeur: [50, -50], hauteur: 160 },
+      { largeur: [50, -21], hauteur: 160 },
+    ],
+  },
+  {
+    classe: 'rounded-card',
+    cadres: [
+      { ecranMin: 1152, largeur: 253, hauteur: 260 },
+      { ecranMin: 1024, largeur: [25, -35], hauteur: 260 },
+      { ecranMin: 640, largeur: [50, -50], hauteur: 160 },
+      { largeur: [50, -21], hauteur: 160 },
+    ],
+  },
+  {
+    classe: 'col-span-2 rounded-card lg:col-span-1',
+    cadres: [
+      { ecranMin: 1152, largeur: 253, hauteur: 260 },
+      { ecranMin: 1024, largeur: [25, -35], hauteur: 260 },
+      { ecranMin: 640, largeur: [100, -80], hauteur: 160 },
+      { largeur: [100, -32], hauteur: 160 },
+    ],
+  },
+];
+// Plusieurs photos peuvent porter le même numéro « accueil » : les suivantes prennent cette forme.
+const formeParDefaut = formesMosaique[3]!;
 ---
 
 <BaseLayout titre={page.data.titre} description={page.data.description}>
@@ -56,11 +113,10 @@ const formesMosaique = [
     <Section>
       <div class="grid items-end gap-7 lg:grid-cols-12">
         <div class="relative lg:col-span-7">
-          <img
-            src={chantierUne.photo}
+          <Photo
+            adresse={chantierUne.photo}
             alt={chantierUne.titre}
-            loading="lazy"
-            decoding="async"
+            cadres={cadresChantierUne}
             class="h-110 w-full rounded-card object-cover sm:h-160"
           />
           <p class="absolute top-4 left-4 rounded-button bg-brand-600 px-4 py-2 text-xs font-medium tracking-widest text-white uppercase sm:top-6 sm:left-6">
@@ -76,11 +132,10 @@ const formesMosaique = [
             <div class="grid grid-cols-3 gap-3">
               {chantierUne.etapes.map((etape) => (
                 <figure class="flex flex-col gap-2">
-                  <img
-                    src={etape.photo}
+                  <Photo
+                    adresse={etape.photo}
                     alt=""
-                    loading="lazy"
-                    decoding="async"
+                    cadres={cadresEtape}
                     class="h-25 w-full rounded-thumb object-cover sm:h-35"
                   />
                   <figcaption class="text-sm text-ink-600">{etape.legende}</figcaption>
@@ -106,15 +161,17 @@ const formesMosaique = [
       centre
     >
       <div class="grid grid-flow-dense auto-rows-40 grid-cols-2 gap-2.5 sm:gap-5 lg:auto-rows-65 lg:grid-cols-4">
-        {photosMosaique.map((photo, index) => (
-          <img
-            src={photo.fichier}
-            alt={photo.legende}
-            loading="lazy"
-            decoding="async"
-            class={`size-full object-cover ${formesMosaique[index] ?? 'rounded-card'}`}
-          />
-        ))}
+        {photosMosaique.map((photo, index) => {
+          const forme = formesMosaique[index] ?? formeParDefaut;
+          return (
+            <Photo
+              adresse={photo.fichier}
+              alt={photo.legende}
+              cadres={forme.cadres}
+              class={`size-full object-cover ${forme.classe}`}
+            />
+          );
+        })}
       </div>
       <div class="mt-10 flex justify-center">
         <Button href="/realisations/">{realisations.apercuAccueil.bouton}</Button>
