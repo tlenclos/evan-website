@@ -1,5 +1,6 @@
 ---
 import { site } from '../data';
+import LienEmail from './LienEmail.astro';
 
 const annee = new Date().getFullYear();
 ---
@@ -20,9 +21,7 @@ const annee = new Date().getFullYear();
           </a>
         </li>
         <li>
-          <a href={`mailto:${site.contact.email}`} class="break-all hover:text-brand-600">
-            {site.contact.email}
-          </a>
+          <LienEmail class="break-all hover:text-brand-600" />
         </li>
         <li>{site.contact.adresse}</li>
       </ul>
