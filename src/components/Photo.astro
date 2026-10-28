@@ -1,0 +1,29 @@
+---
+import { Image } from 'astro:assets';
+import { imagePhoto, largeursPhoto, taillesAffichage, type Cadre } from './photos';
+
+/**
+ * Photo de chantier, servie en WebP et en plusieurs largeurs : le navigateur
+ * télécharge la plus petite version qui reste nette dans son emplacement.
+ * `cadres` décrit cet emplacement (voir `Cadre` dans photos.ts).
+ */
+interface Props {
+  adresse: string;
+  alt: string;
+  cadres: Cadre[];
+  class?: string;
+  priority?: boolean;
+}
+
+const { adresse, alt, cadres, class: classe, priority = false } = Astro.props;
+const image = imagePhoto(adresse);
+---
+
+<Image
+  src={image}
+  alt={alt}
+  widths={largeursPhoto(image)}
+  sizes={taillesAffichage(cadres, image.width / image.height)}
+  class={classe}
+  priority={priority}
+/>

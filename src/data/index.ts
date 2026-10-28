@@ -41,7 +41,8 @@ function valider<T>(schema: z.ZodType<T>, contenu: string, nomFichier: string): 
 const imageExistante = (cheminPublic: string) => existsSync(`public${cheminPublic}`);
 
 // Photo de chantier, désignée par son adresse sur le site : /images/realisations/nom.jpg.
-// C'est la forme qu'écrit le sélecteur d'images de Pages CMS.
+// C'est la forme qu'écrit le sélecteur d'images de Pages CMS. Le fichier, lui, est
+// rangé dans src/assets/realisations/ pour être optimisé à la construction.
 export const schemaPhoto = z
   .string()
   .startsWith('/images/realisations/', {
@@ -49,7 +50,14 @@ export const schemaPhoto = z
       'doit commencer par /images/realisations/, par exemple /images/realisations/pergola-bois.jpg',
     abort: true,
   })
-  .refine(imageExistante, 'fichier introuvable dans public/images/realisations/');
+  .regex(/\.(jpe?g|png|webp|avif)$/i, {
+    message: 'format accepté : .jpg, .png, .webp ou .avif',
+    abort: true,
+  })
+  .refine(
+    (adresse) => existsSync(adresse.replace('/images/realisations/', 'src/assets/realisations/')),
+    'fichier introuvable dans src/assets/realisations/',
+  );
 
 // --- Réglages généraux : src/data/site.yaml ---------------------------------
 const schemaSite = z.object({

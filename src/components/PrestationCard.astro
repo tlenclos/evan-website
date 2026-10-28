@@ -1,4 +1,7 @@
 ---
+import Photo from './Photo.astro';
+import type { Cadre } from './photos';
+
 /** Carte présentant une prestation. Les données viennent de src/data/prestations.yaml. */
 interface Props {
   titre: string;
@@ -9,17 +12,18 @@ interface Props {
 }
 
 const { titre, description, tarif, details, photo } = Astro.props;
+
+const cadresPhoto: Cadre[] = [
+  { ecranMin: 1152, largeur: 337, hauteur: 288 },
+  { ecranMin: 1024, largeur: [33.33, -47.33], hauteur: 288 },
+  { ecranMin: 640, largeur: [50, -56], hauteur: 288 },
+  { largeur: [100, -34], hauteur: 208 },
+];
 ---
 
 <article class="flex h-full flex-col overflow-hidden rounded-card border border-ink-200 bg-surface">
   {photo && (
-    <img
-      src={photo}
-      alt=""
-      loading="lazy"
-      decoding="async"
-      class="h-52 w-full object-cover sm:h-72"
-    />
+    <Photo adresse={photo} alt="" cadres={cadresPhoto} class="h-52 w-full object-cover sm:h-72" />
   )}
   <div class="flex flex-1 flex-col p-6 sm:p-7">
     <h3 class="font-display text-2xl font-medium text-ink-700">{titre}</h3>

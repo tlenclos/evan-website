@@ -1,5 +1,7 @@
 ---
 import Button from './Button.astro';
+import Photo from './Photo.astro';
+import type { Cadre } from './photos';
 import { site } from '../data';
 
 /**
@@ -28,6 +30,17 @@ const {
   photoSecondaire,
   legendePhoto,
 } = Astro.props;
+
+const cadresPhoto: Cadre[] = [
+  { ecranMin: 1152, largeur: 403, ratio: 0.8 },
+  { ecranMin: 1024, largeur: [40, -57.6], ratio: 0.8 },
+  { ecranMin: 640, largeur: [80, -64], ratio: 0.8 },
+  { largeur: [75, -24], ratio: 0.8 },
+];
+const cadresPhotoSecondaire: Cadre[] = [
+  { ecranMin: 640, largeur: 224, ratio: 1 },
+  { largeur: 144, ratio: 1 },
+];
 ---
 
 <div class:list={['relative overflow-hidden', photo ? 'bg-surface' : 'bg-surface-muted']}>
@@ -63,15 +76,19 @@ const {
 
     {photo && (
       <div class="relative h-96 sm:h-150 lg:col-start-2 lg:row-span-2 lg:row-start-1">
-        <img
-          src={photo}
+        <Photo
+          adresse={photo}
           alt={legendePhoto ?? ''}
+          cadres={cadresPhoto}
+          priority
           class="rounded-arch absolute top-0 right-0 aspect-4/5 w-3/4 object-cover sm:w-4/5"
         />
         {photoSecondaire && (
-          <img
-            src={photoSecondaire}
+          <Photo
+            adresse={photoSecondaire}
             alt=""
+            cadres={cadresPhotoSecondaire}
+            priority
             class="absolute bottom-0 left-0 size-36 rounded-full border-6 border-surface object-cover sm:size-56 sm:border-8"
           />
         )}

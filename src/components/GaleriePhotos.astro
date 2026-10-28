@@ -1,4 +1,7 @@
 ---
+import { getImage } from 'astro:assets';
+import Photo from './Photo.astro';
+import { imagePhoto, type Cadre } from './photos';
 import type { PhotoRealisation } from '../data';
 
 /**
@@ -11,22 +14,30 @@ interface Props {
 }
 
 const { photos } = Astro.props;
+
+const cadresPhoto: Cadre[] = [
+  { ecranMin: 1152, largeur: 341, ratio: 0.8 },
+  { ecranMin: 1024, largeur: [33.33, -42.67], ratio: 0.8 },
+  { ecranMin: 640, largeur: [50, -52], ratio: 0.8 },
+  { largeur: [50, -22], ratio: 0.8 },
+];
+
+// Version plein format, ouverte au clic.
+const photosEnGrand = await Promise.all(
+  photos.map((photo) => getImage({ src: imagePhoto(photo.fichier), format: 'webp' })),
+);
 ---
 
 <ul class="grid grid-cols-2 gap-x-3 gap-y-6 sm:gap-x-6 sm:gap-y-10 lg:grid-cols-3">
   {photos.map((photo, index) => (
     <li>
       <figure>
-        <a href={photo.fichier} class="group relative block">
-          <img
-            src={photo.fichier}
+        <a href={photosEnGrand[index]?.src} class="group relative block">
+          <Photo
+            adresse={photo.fichier}
             alt={photo.legende}
-            loading="lazy"
-            decoding="async"
-            class:list={[
-              'aspect-4/5 w-full bg-ink-100 object-cover transition-opacity group-hover:opacity-90',
-              index % 3 === 1 ? 'rounded-arch' : 'rounded-card',
-            ]}
+            cadres={cadresPhoto}
+            class={`aspect-4/5 w-full bg-ink-100 object-cover transition-opacity group-hover:opacity-90 ${index % 3 === 1 ? 'rounded-arch' : 'rounded-card'}`}
           />
           {photo.etiquette && (
             <span class="absolute top-3 left-3 rounded-button bg-ink-900 px-3.5 py-1.5 text-xs font-medium tracking-widest text-ink-50 uppercase sm:top-4 sm:left-4">
