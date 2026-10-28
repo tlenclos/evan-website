@@ -1,6 +1,6 @@
 # Site d'Evan
 
-Site vitrine statique, publié automatiquement sur **https://evan-website.thibaultlenclos.fr**.
+Site vitrine statique, publié automatiquement sur **https://ebconceptetrenovation.fr**.
 
 Ce fichier s'adresse à la personne qui fait vivre le site au quotidien. Aucune
 connaissance technique n'est nécessaire pour ce qui suit.
@@ -76,9 +76,9 @@ signalent les valeurs d'exemple qui restent à remplacer par les vraies.
 5. Attendez une à deux minutes, puis rechargez le site.
 
 **Si vous vous trompez**, le site en ligne n'est jamais cassé : la publication
-s'arrête et l'ancienne version reste affichée. Le déploiement apparaît en échec
-dans Coolify, et le message d'erreur indique quel fichier et quel champ posent
-problème.
+s'arrête et l'ancienne version reste affichée. Un point rouge apparaît dans
+l'onglet _Actions_ de GitHub, et le message d'erreur indique quel fichier et
+quel champ posent problème.
 
 ---
 
@@ -100,7 +100,7 @@ ligne à la liste **Photos** et déposez la photo directement dans son champ.
 
 ## Vérifier la charte graphique
 
-La page **https://evan-website.thibaultlenclos.fr/styleguide** affiche toutes les
+La page **https://ebconceptetrenovation.fr/styleguide** affiche toutes les
 couleurs, polices et briques visuelles du site sur un seul écran. Elle n'est pas
 dans le menu et n'apparaît pas dans Google. C'est l'endroit où vérifier d'un coup
 d'œil qu'une modification de charte reste cohérente.
