@@ -1,7 +1,7 @@
 # Consignes de développement
 
-Site vitrine statique. Astro 7 + Tailwind v4, sortie 100 % statique, déployée par
-Coolify à l'adresse `https://evan-website.thibaultlenclos.fr`.
+Site vitrine statique. Astro 7 + Tailwind v4, sortie 100 % statique, publiée par
+GitHub Pages à l'adresse `https://ebconceptetrenovation.fr`.
 
 **Objectif du projet : une personne non technique doit pouvoir demander une
 modification en une phrase.** Toutes les règles ci-dessous en découlent.
@@ -65,7 +65,7 @@ correspondante au schéma** : c'est ce qui protège la personne qui édite.
 
 `.pages.yml`, à la racine, décrit les formulaires de
 [Pages CMS](https://pagescms.org). Chaque enregistrement y crée un commit sur
-`main`, que Coolify déploie comme n'importe quel autre envoi.
+`main`, publié comme n'importe quel autre envoi.
 
 **`.pages.yml` doit suivre les schémas Zod.** Tout champ ajouté, renommé ou
 rendu obligatoire dans `src/data/index.ts` ou `src/content.config.ts` doit
@@ -159,54 +159,36 @@ document.documentElement.scrollWidth - document.documentElement.clientWidth; // 
 
 ## Publication
 
-Le site est déployé par **Coolify**, sur un serveur OVH. Tout envoi sur `main`
-déclenche une reconstruction et une mise en ligne.
+Le site est publié par **GitHub Pages** à l'adresse
+`https://ebconceptetrenovation.fr`. Tout envoi sur `main` (y compris un
+enregistrement depuis Pages CMS) déclenche une reconstruction et une mise en
+ligne, en une à deux minutes.
 
-Le déploiement est décrit **dans le dépôt**, par deux fichiers :
+- `.github/workflows/deploy.yml` lance `npm ci`, `npm run check`, `npm run build`
+  avec Node 22, puis publie `dist/`. Le suivi se fait dans l'onglet _Actions_.
+- `public/CNAME` fixe le nom de domaine : ne pas le supprimer, il est recopié
+  tel quel dans `dist/` à chaque construction.
+- Réglage du dépôt : _Settings → Pages → Source = « GitHub Actions »_. Pages
+  n'est gratuit que parce que le dépôt est **public** : le repasser en privé
+  coupe le site (c'est ce qui avait motivé un passage temporaire par Coolify).
 
-- `Dockerfile` — construction en deux étapes : `npm ci`, `npm run check`,
-  `npm run build` avec Node 22, puis copie de `dist/` dans une image nginx.
-  L'image finale ne contient ni Node, ni `node_modules`, ni code source.
-- `nginx.conf` — comment les pages sont servies : adressage des dossiers
-  (`dist/contact/index.html`), page 404, durées de cache, compression.
-
-Il ne reste que trois champs à régler dans l'interface Coolify :
-
-| Champ          | Valeur       |
-| -------------- | ------------ |
-| Build Pack     | `Dockerfile` |
-| Base Directory | `/`          |
-| Ports Exposes  | `80`         |
-
-**Trois pièges déjà rencontrés**, à ne pas réintroduire :
-
-- _Base Directory_ réglée sur `/dist` : le dossier de build est dans
-  `.gitignore`, il n'existe pas dans le code importé. La construction échoue sur
-  « Nixpacks failed to detect the application type ».
-- Build pack `Nixpacks` : il cherche à démarrer un serveur, or il n'y a pas de
-  script `start` et un site statique n'a rien à démarrer.
-- Build pack `Static` : il ne permet pas de lancer une commande de build. Il
-  faudrait committer `dist/`, ce que l'on ne veut pas.
-
-`llms.txt` et `llms-full.txt`, à la racine, documentent le CLI Coolify — à
-consulter pour toute intervention sur le déploiement.
-
-**Le contenu est validé avant la mise en ligne.** Le `Dockerfile` lance
+**Le contenu est validé avant la mise en ligne.** Le workflow lance
 `npm run check` avant de construire : une erreur de saisie dans un `.yaml` ou un
-`.md` arrête la construction de l'image, et la version précédente du site reste
-en ligne.
+`.md` arrête la publication, et la version précédente du site reste en ligne.
 
-### Tester la configuration nginx sans Docker
+### Nom de domaine
 
-Le démon Docker n'est pas disponible dans les sessions Claude Code distantes.
-Pour vérifier `nginx.conf` malgré tout : `npm run build`, puis lancer nginx sur
-un port libre avec ce fichier, en remplaçant `listen 80` et la directive `root`
-par le chemin de `dist/`. Ajouter `user root;` dans la configuration de test si
-les fichiers sont hors du répertoire du projet, sinon nginx renvoie des 404 par
-manque de droits. Contrôler alors : les pages répondent en 200, une URL
-inconnue renvoie bien un code 404 **et** la page 404 du site, et
-`/contact` redirige vers `/contact/` par un `Location` **relatif** — le
-conteneur est derrière le proxy de Coolify.
+`ebconceptetrenovation.fr` est enregistré chez **OVH** (compte d'Evan, Thibault
+en contact technique). Zone DNS attendue :
+
+| Sous-domaine | Type    | Cible                                                 |
+| ------------ | ------- | ----------------------------------------------------- |
+| _(vide)_     | `A`     | `185.199.108.153`, `.109.153`, `.110.153`, `.111.153` |
+| _(vide)_     | `AAAA`  | `2606:50c0:8000::153` à `2606:50c0:8003::153`         |
+| `www`        | `CNAME` | `tlenclos.github.io.`                                 |
+
+GitHub redirige `www` vers le domaine nu et fournit le certificat HTTPS
+(_Enforce HTTPS_ dans _Settings → Pages_, une fois le certificat émis).
 
 ---
 
