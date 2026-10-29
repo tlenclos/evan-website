@@ -148,6 +148,23 @@ Ajouter un bloc dans `src/data/prestations.yaml` ou `temoignages.yaml`, avec un
    le gabarit le plus simple, et changer l'identifiant passé à `getEntry`.
 3. Ajouter l'entrée dans `menu:` de `src/data/site.yaml` (URL avec le `/` final).
 
+La page entre seule dans le sitemap. Une page passée en `noindex` doit aussi
+être ajoutée à `pagesNonReferencees` dans `astro.config.mjs`, sinon le sitemap
+propose à Google une page qui lui demande de l'ignorer.
+
+### Référencement
+
+`BaseLayout.astro` produit pour chaque page le titre (`titre` du frontmatter
+suivi du nom de l'entreprise, 60 caractères au plus), la description, l'URL
+canonique, l'aperçu de partage (`photoPartage` de `site.yaml`, recadrée en
+1200 × 630) et la fiche d'entreprise schema.org. Les vérifications à faire
+hors du code (Search Console, fiche Google, annuaires) sont suivies dans le
+ticket https://github.com/tlenclos/evan-website/issues/12.
+
+L'adresse e-mail `contact@ebconceptrenovation.fr` (sans « et ») est voulue :
+elle dépend de l'ancien domaine d'Evan, servi par Google Workspace. Le domaine
+du site n'a pas de boîte e-mail. Ne pas « corriger » l'adresse.
+
 ### Modifier la charte graphique
 
 Changer les valeurs de `@theme static` dans `src/styles/global.css`, puis

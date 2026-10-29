@@ -1,7 +1,7 @@
 ---
 # Les lignes entre les deux --- règlent tous les textes de la page d'accueil.
 # Les photos se désignent par leur adresse : '/images/realisations/nom-du-fichier.jpg'.
-titre: 'Accueil'
+titre: 'Rénovation et aménagement à Angoulême'
 description: 'EB Concept & Rénovation à Angoulême : électricité, plaquisterie, parquet, terrasses et pergolas en bois, multiservices. Travail soigné et sur mesure.'
 
 # --- Le grand bandeau du haut

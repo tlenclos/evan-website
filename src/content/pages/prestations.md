@@ -1,5 +1,5 @@
 ---
-titre: 'Prestations'
+titre: 'Prestations de rénovation à Angoulême'
 description: 'Électricité générale, plaquisterie, parquet, terrasses et pergolas en bois, travaux multiservices : le détail des prestations.'
 hero:
   titre: 'Ce que je réalise'

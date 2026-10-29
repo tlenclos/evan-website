@@ -76,7 +76,11 @@ content:
     fields:
       - name: titre
         label: Titre de la page
-        description: Affiché dans l'onglet du navigateur et dans les résultats Google.
+        description: >-
+          Affiché dans l'onglet du navigateur et en titre dans les résultats
+          Google, suivi du nom de l'entreprise. 40 caractères maximum, avec la
+          ville quand c'est possible (par exemple « Prestations de rénovation à
+          Angoulême »).
         type: string
         required: true
       - name: description
@@ -293,6 +297,13 @@ content:
         description: Par exemple « Angoulême et alentours ».
         type: string
         required: true
+      - name: photoPartage
+        label: Photo de partage
+        description: >-
+          Affichée quand un lien du site est partagé (WhatsApp, Facebook, SMS…).
+          Elle est recadrée au format paysage : choisissez une photo en largeur.
+        component: photo
+        required: true
       - name: formeJuridique
         label: Forme juridique
         description: Par exemple « EURL ». Affichée dans le pied de page et les mentions légales.
@@ -327,8 +338,15 @@ content:
             required: true
           - name: adresse
             label: Adresse
+            description: >-
+              Sous la forme « rue, code postal ville », par exemple
+              17 rue Angel Albert, 16000 Angoulême. Google lit la ville et le
+              code postal après la virgule.
             type: string
             required: true
+            pattern:
+              regex: '^.+,\s*\d{5}\s+\S.*$'
+              message: 'Écrivez la rue, une virgule, puis le code postal et la ville.'
           - name: siret
             label: SIRET
             description: Obligatoire, affiché sur la page des mentions légales.

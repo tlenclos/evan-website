@@ -1,5 +1,5 @@
 ---
-titre: 'Réalisations'
+titre: 'Réalisations près d’Angoulême'
 description: 'Terrasses bois et piscines, pergolas, plaquisterie décorative, rénovation : les chantiers réalisés par EB Concept & Rénovation.'
 hero:
   surtitre: 'Réalisations'
