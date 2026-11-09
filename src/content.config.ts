@@ -50,7 +50,7 @@ const pages = defineCollection({
         titre: z.string(),
         texte: z.string(),
         photo: schemaPhoto,
-        // Pages CMS supprime une liste vide à l'enregistrement : la clé peut donc manquer.
+        // Une liste vide peut être omise à l'enregistrement : la clé peut donc manquer.
         etapes: z.array(z.object({ photo: schemaPhoto, legende: z.string() })).default([]),
         bouton: z.string(),
       })

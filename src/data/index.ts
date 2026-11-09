@@ -20,7 +20,7 @@ import contenuRealisations from './realisations.yaml?raw';
  */
 
 function valider<T>(schema: z.ZodType<T>, contenu: string, nomFichier: string): T {
-  // Pages CMS écrit un fichier vide quand on supprime le dernier élément d'une liste.
+  // Un fichier vidé de tout son contenu est traité comme absent.
   const donnees = contenu.trim() === '' ? undefined : chargerYaml(contenu);
   const resultat = schema.safeParse(donnees);
 
@@ -41,7 +41,7 @@ function valider<T>(schema: z.ZodType<T>, contenu: string, nomFichier: string): 
 const imageExistante = (cheminPublic: string) => existsSync(`public${cheminPublic}`);
 
 // Photo de chantier, désignée par son adresse sur le site : /images/realisations/nom.jpg.
-// C'est la forme qu'écrit le sélecteur d'images de Pages CMS. Le fichier, lui, est
+// C'est la forme qu'écrit le sélecteur d'images de Sveltia CMS. Le fichier, lui, est
 // rangé dans src/assets/realisations/ pour être optimisé à la construction.
 export const schemaPhoto = z
   .string()
@@ -83,7 +83,7 @@ const schemaSite = z.object({
     siret: z.string().min(1),
   }),
   horaires: z.array(z.object({ jour: z.string(), heures: z.string() })).min(1),
-  // Pages CMS supprime une liste vide à l'enregistrement : la clé peut donc manquer.
+  // Une liste vide peut être omise à l'enregistrement : la clé peut donc manquer.
   reseaux: z.array(z.object({ nom: z.string(), url: z.url() })).default([]),
   menu: z
     .array(
