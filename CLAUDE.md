@@ -61,55 +61,61 @@ correspondante au schéma** : c'est ce qui protège la personne qui édite.
 
 ---
 
-## Interface d'édition (Pages CMS)
+## Interface d'édition (Sveltia CMS)
 
-`.pages.yml`, à la racine, décrit les formulaires de
-[Pages CMS](https://pagescms.org). Chaque enregistrement y crée un commit sur
-`main`, publié comme n'importe quel autre envoi.
+`public/admin/config.yml` décrit les formulaires de
+[Sveltia CMS](https://sveltiacms.app), servi à l'adresse `/admin/` du site
+(`/admin/index.html` avec `npm run dev`). Chaque enregistrement y crée un commit
+sur `main`, publié comme n'importe quel autre envoi. `public/admin/index.html`
+charge l'interface depuis unpkg : c'est la seule exception à la règle 5, et elle
+ne concerne pas les pages publiques. Garder ce fichier tel quel (ni feuille de
+style, ni `type="module"`).
 
-**`.pages.yml` doit suivre les schémas Zod.** Tout champ ajouté, renommé ou
+**`config.yml` doit suivre les schémas Zod.** Tout champ ajouté, renommé ou
 rendu obligatoire dans `src/data/index.ts` ou `src/content.config.ts` doit
-l'être aussi dans `.pages.yml`, avec la même règle (`required`, `pattern`).
+l'être aussi dans `config.yml`, avec la même règle (`required`, `pattern`).
 Sinon l'interface accepte une saisie que `npm run check` refusera, et le site ne
-se mettra pas à jour sans que la personne qui édite le sache.
+se mettra pas à jour sans que la personne qui édite le sache. La ligne
+`$schema` en tête du fichier permet à l'éditeur de code de signaler une option
+mal orthographiée ; l'écran de connexion de `/admin/` liste les autres erreurs
+de configuration.
 
-Comportements de Pages CMS à connaître :
+Comportements de Sveltia CMS à connaître :
 
-- Il **supprime tout champ absent de `.pages.yml`** : à l'enregistrement, le
-  formulaire passe par un `z.object()` généré depuis la configuration, qui
-  retire les clés inconnues, y compris dans les objets et les listes. Un champ
-  oublié dans `.pages.yml` disparaît donc au premier enregistrement — et si le
-  schéma Zod le rend obligatoire, le site cesse de se mettre à jour. Constaté
-  dans le code de Pages CMS (`app/api/[owner]/[repo]/[branch]/files/[path]/route.ts`,
-  dépôt `hunvreus/pagescms`, octobre 2026), puis reproduit en rejouant cette
-  étape en local sur un fichier de test (pas encore observé sur app.pagescms.org).
-  L'option `settings.content.merge: true` conserverait ces clés, mais elle
-  empêcherait aussi de vider un champ facultatif (l'ancienne valeur revient) et
-  ne s'applique pas aux listes : ne pas l'activer.
+- Un champ est **obligatoire par défaut** : un champ facultatif porte
+  `required: false`, et correspond à un `.optional()` (ou `.default([])` pour
+  une liste) côté Zod.
+- `output.omit_empty_optional_fields: true` retire du fichier les champs
+  facultatifs laissés vides, au lieu d'écrire `''` ou `null` que les schémas
+  Zod refuseraient. Ne pas le retirer.
 - Il **réécrit entièrement** le fichier enregistré : les commentaires `#` des
   `.yaml` et du frontmatter disparaissent, et la mise en forme change. Les
-  consignes pour l'éditeur vont donc dans les `description` de `.pages.yml`.
-- Il **supprime les clés vides**, y compris une liste vide. Un champ facultatif
-  côté Pages CMS doit être `.optional()` (ou `.default([])` pour une liste)
-  côté Zod — voir `reseaux`. Vider une liste à la racine (tous les avis
-  supprimés) produit même un fichier **vide** : `valider()` le traite comme
-  absent, d'où le `.default([])` de `schemaTemoignages`.
+  consignes pour l'éditeur vont donc dans les `hint` de `config.yml`. Les
+  clés absentes de la configuration sont en revanche conservées.
 - Son sélecteur d'images enregistre l'**adresse** de l'image
-  (`/images/realisations/pergola-bois.jpg`), jamais le seul nom de fichier :
-  une valeur qui ne commence pas par le dossier du média est refusée à
-  l'enregistrement. Les photos s'écrivent donc ainsi dans tout le contenu, et
-  `schemaPhoto` l'exige. Les champs photo de `.pages.yml` utilisent le
-  composant `photo`, rattaché au média `realisations`. Ce média range les
-  fichiers dans `src/assets/realisations/` (`input`) tout en écrivant l'adresse
-  `/images/realisations/…` (`output`) : voir « Photos » ci-dessous.
-- Il n'est pas possible d'y créer une page : `operations` l'interdit pour la
+  (`/images/realisations/pergola-bois.jpg`), construite à partir de
+  `public_folder`. Les photos s'écrivent donc ainsi dans tout le contenu, et
+  `schemaPhoto` l'exige. `media_folder` range les fichiers déposés dans
+  `src/assets/realisations/` : voir « Photos » ci-dessous. Le logo surcharge ces
+  deux réglages pour viser `public/images/`.
+- Les champs photo reprennent le modèle `&photo` (ancre YAML) par
+  `<<: *photo`, puis surchargent `name`, `label`, `hint` ou `required`.
+- `prestations.yaml` et `temoignages.yaml` sont des listes à la racine du
+  fichier : un seul champ `list` avec `root: true`.
+- Il n'est pas possible d'y créer, renommer ou supprimer une page :
+  `create`, `delete`, `duplicate` et `slug.editable` l'interdisent pour la
   collection `pages`, puisqu'une page exige aussi un fichier `.astro`.
 
-Mise en place (une seule fois, par le propriétaire du dépôt) : se connecter à
-https://app.pagescms.org avec GitHub, installer l'application GitHub sur le
-dépôt `tlenclos/evan-website`, puis inviter la personne qui édite par e-mail
-depuis l'onglet **Collaborators** du projet. Elle n'a pas besoin de compte
-GitHub.
+Connexion : chaque personne qui édite a besoin d'un **compte GitHub** avec un
+accès en écriture au dépôt `tlenclos/evan-website` (_Settings → Collaborators_).
+Choix retenu : connexion par **jeton d'accès** uniquement (`auth_methods:
+[token]`), pour n'avoir rien à héberger. Le jeton est un _fine-grained token_
+GitHub limité à ce dépôt, avec le droit _Contents : Read and write_ ; le
+navigateur le garde, à refaire par appareil et à son expiration. Pour un bouton
+« Se connecter avec GitHub », il faudrait déployer
+[Sveltia CMS Authenticator](https://github.com/sveltia/sveltia-cms-auth) sur
+Cloudflare Workers, avec une application OAuth GitHub, puis renseigner
+`backend.base_url` et retirer `auth_methods` dans `config.yml`.
 
 ---
 
@@ -196,7 +202,7 @@ document.documentElement.scrollWidth - document.documentElement.clientWidth; // 
 
 Le site est publié par **GitHub Pages** à l'adresse
 `https://ebconceptetrenovation.fr`. Tout envoi sur `main` (y compris un
-enregistrement depuis Pages CMS) déclenche une reconstruction et une mise en
+enregistrement depuis Sveltia CMS) déclenche une reconstruction et une mise en
 ligne, en une à deux minutes.
 
 - `.github/workflows/deploy.yml` lance `npm ci`, `npm run check`, `npm run build`

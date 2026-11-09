@@ -25,18 +25,18 @@ Trois façons de faire une modification :
 
 ## L'interface d'édition
 
-1. Ouvrez **https://app.pagescms.org** et connectez-vous avec l'adresse e-mail à
-   laquelle vous avez reçu l'invitation.
-2. Choisissez le site, puis dans le menu de gauche ce que vous voulez modifier :
-   **Pages**, **Réglages du site**, **Prestations**, **Réalisations**,
-   **Avis clients**, ou les photos (**Images** et **Photos de chantiers**).
-3. Modifiez, puis cliquez sur **Save**. Le site se met à jour une à deux minutes
-   plus tard.
+1. Ouvrez **https://ebconceptetrenovation.fr/admin/** et connectez-vous avec
+   votre compte GitHub (il doit avoir été ajouté au dépôt du site).
+2. Dans le menu de gauche, choisissez ce que vous voulez modifier : **Pages**,
+   **Réglages du site**, **Prestations**, **Réalisations** ou **Avis clients**.
+   Les photos se gèrent depuis la **bibliothèque de médias**.
+3. Modifiez, puis cliquez sur **Enregistrer**. Le site se met à jour une à deux
+   minutes plus tard.
 
 Sous chaque champ, une ligne d'aide indique ce qu'il faut y mettre. Un champ mal
 rempli est signalé en rouge et n'est pas enregistré.
 
-Créer ou supprimer une **page** n'est pas possible depuis l'interface : il faut
+Créer, renommer ou supprimer une **page** n'est pas possible depuis l'interface : il faut
 aussi modifier le code, demandez-le à Claude. Les prestations, les photos de
 chantiers et les avis, eux, s'ajoutent, se suppriment et se réordonnent
 librement. Un champ photo ouvre la liste des photos de chantiers : choisissez-en

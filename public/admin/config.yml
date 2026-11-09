@@ -1,0 +1,536 @@
+# yaml-language-server: $schema=https://unpkg.com/@sveltia/cms/schema/sveltia-cms.json
+
+# =============================================================================
+#  CONFIGURATION DE L'INTERFACE D'ÉDITION (Sveltia CMS)
+#  -----------------------------------------------------------------------------
+#  Ce fichier décrit les formulaires affichés sur /admin/. Il ne change rien au
+#  site lui-même.
+#
+#  Chaque champ reprend une règle des schémas Zod de `src/data/index.ts` et de
+#  `src/content.config.ts`. Modifier un schéma impose de modifier ce fichier :
+#  sinon l'interface accepte une saisie que la construction refusera ensuite.
+#
+#  Sveltia CMS réécrit le fichier enregistré : les commentaires (# …) des
+#  fichiers .yaml et .md disparaissent. Les consignes destinées à la personne
+#  qui édite vivent donc ici, dans les « hint » des champs.
+#
+#  Dans Sveltia CMS, un champ est obligatoire par défaut : un champ facultatif
+#  porte `required: false`.
+# =============================================================================
+
+backend:
+  name: github
+  repo: tlenclos/evan-website
+  branch: main
+  # Connexion par jeton d'accès GitHub uniquement : rien à héberger. Pour un
+  # bouton « Se connecter avec GitHub », déployer l'authentificateur
+  # https://github.com/sveltia/sveltia-cms-auth, renseigner son adresse dans
+  # `base_url` et retirer `auth_methods`.
+  auth_methods: [token]
+  commit_messages:
+    create: 'Créer {{collection}} « {{slug}} » depuis Sveltia CMS'
+    update: 'Modifier {{collection}} « {{slug}} » depuis Sveltia CMS'
+    delete: 'Supprimer {{collection}} « {{slug}} » depuis Sveltia CMS'
+    uploadMedia: 'Ajouter {{path}} depuis Sveltia CMS'
+    deleteMedia: 'Supprimer {{path}} depuis Sveltia CMS'
+
+# Les photos de chantiers sont rangées dans src/assets/ (le site en produit à la
+# construction des versions allégées, à la taille de chaque emplacement), mais
+# le contenu les désigne par leur adresse /images/realisations/nom.jpg
+# (voir `schemaPhoto`).
+media_folder: /src/assets/realisations
+public_folder: /images/realisations
+
+media_libraries:
+  default:
+    config:
+      slugify_filename: true
+
+# Noms de fichiers en minuscules, sans accent ni espace.
+slug:
+  encoding: ascii
+  clean_accents: true
+
+output:
+  # Les schémas Zod attendent un champ facultatif absent, pas vide.
+  omit_empty_optional_fields: true
+
+collections:
+  # --- Texte des pages : src/content/pages/*.md ------------------------------
+  - name: pages
+    label: Pages
+    label_singular: Page
+    icon: description
+    description: >-
+      Le texte de chaque page du site. Pour créer une nouvelle page, il faut
+      aussi modifier le code : demandez-le.
+    folder: /src/content/pages
+    format: yaml-frontmatter
+    extension: md
+    identifier_field: titre
+    # Une page n'existe que si un fichier .astro lui correspond : on ne crée,
+    # ne renomme, ne duplique et ne supprime donc pas de page depuis l'interface.
+    create: false
+    delete: false
+    duplicate: false
+    slug:
+      editable: false
+    fields:
+      - name: titre
+        label: Titre de la page
+        hint: >-
+          Affiché dans l'onglet du navigateur et en titre dans les résultats
+          Google, suivi du nom de l'entreprise. 40 caractères maximum, avec la
+          ville quand c'est possible (par exemple « Prestations de rénovation à
+          Angoulême »).
+      - name: description
+        label: Résumé pour Google
+        hint: >-
+          Phrase affichée par Google sous le titre de la page. Idéalement entre
+          150 et 160 caractères.
+        widget: text
+      - name: hero
+        label: Grand bandeau du haut de page
+        hint: Facultatif. Décochez pour ne pas afficher de bandeau.
+        widget: object
+        required: false
+        fields:
+          - name: surtitre
+            label: Surtitre
+            hint: >-
+              Petite ligne en capitales au-dessus du titre. Facultatif : sans
+              surtitre, le métier et la zone d'intervention s'affichent.
+            required: false
+          - name: titre
+            label: Titre du bandeau
+          - name: texte
+            label: Texte du bandeau
+            widget: text
+          - name: ctaTexte
+            label: Texte du bouton
+            hint: Facultatif. Sans texte, aucun bouton n'est affiché.
+            required: false
+          - name: ctaUrl
+            label: Lien du bouton
+            hint: >-
+              Adresse d'une page du site, avec le « / » au début et à la fin, par
+              exemple /contact/
+            required: false
+          # Modèle de champ photo, repris plus bas par `<<: *photo`.
+          - <<: &photo
+              label: Photo
+              widget: image
+              required: false
+              accept: .jpg,.jpeg,.png,.webp,.avif
+              hint: >-
+                Choisissez une photo de chantier, ou déposez-en une nouvelle
+                (2048 pixels maximum sur le plus grand côté). Envoyez la photo
+                d'origine, sans la réduire ni la recompresser : chaque passage
+                la rend plus floue.
+            name: photo
+            label: Photo principale
+            hint: >-
+              Facultatif. Avec une photo, le bandeau passe sur deux colonnes :
+              texte à gauche, photo en arche à droite.
+          - <<: *photo
+            name: photoSecondaire
+            label: Petite photo ronde
+            hint: >-
+              Facultatif. Affichée en médaillon devant la photo principale.
+              Sans photo principale, elle n'apparaît pas.
+          - name: legendePhoto
+            label: Légende de la photo
+            hint: >-
+              Facultatif. Courte phrase posée sur la photo principale ; sert
+              aussi de description pour les personnes malvoyantes.
+            required: false
+      - name: savoirFaire
+        label: Bloc « Savoir-faire » (page d'accueil uniquement)
+        hint: >-
+          Le titre au-dessus des cartes de prestations. Les cartes elles-mêmes se
+          modifient dans « Prestations ». Décochez pour masquer le bloc.
+        widget: object
+        required: false
+        fields:
+          - name: surtitre
+            label: Surtitre
+          - name: titre
+            label: Titre
+          - name: lien
+            label: Texte du lien vers la page Prestations
+      - name: chantierUne
+        label: Bloc « Chantier à la une » (page d'accueil uniquement)
+        hint: >-
+          Un chantier mis en avant, avec une grande photo et quelques étapes.
+          Décochez pour masquer le bloc.
+        widget: object
+        required: false
+        fields:
+          - name: surtitre
+            label: Pastille sur la photo
+            hint: Par exemple « Chantier à la une ».
+          - name: titre
+            label: Titre
+          - name: texte
+            label: Texte
+            widget: text
+          - <<: *photo
+            name: photo
+            label: Grande photo
+            required: true
+          - name: etapes
+            label: Étapes en images
+            label_singular: Étape
+            hint: >-
+              Facultatif. Petites photos sous le texte, dans l'ordre de la liste.
+              Trois au maximum pour garder une seule rangée.
+            widget: list
+            required: false
+            collapsed: true
+            summary: '{{legende}}'
+            fields:
+              - <<: *photo
+                name: photo
+                required: true
+              - name: legende
+                label: Légende
+                hint: Par exemple « 1 · Structure ».
+          - name: bouton
+            label: Texte du bouton vers les réalisations
+      - name: etapes
+        label: Bloc « Comment se passe un projet » (page d'accueil uniquement)
+        hint: Les étapes numérotées. Décochez pour masquer le bloc.
+        widget: object
+        required: false
+        fields:
+          - name: titre
+            label: Titre
+          - name: liste
+            label: Étapes
+            label_singular: Étape
+            hint: Dans l'ordre ; le numéro s'ajoute tout seul.
+            widget: list
+            min: 1
+            collapsed: true
+            summary: '{{titre}}'
+            fields:
+              - name: titre
+                label: Titre de l'étape
+              - name: texte
+                label: Texte
+                widget: text
+      - name: appel
+        label: Bandeau d'appel au devis, en bas de page
+        hint: >-
+          Utilisé sur l'accueil et sur Réalisations. Le bouton et le numéro de
+          téléphone s'ajoutent tout seuls. Décochez pour le masquer.
+        widget: object
+        required: false
+        fields:
+          - name: titre
+            label: Titre
+          - name: texte
+            label: Texte
+            hint: Facultatif.
+            required: false
+          - <<: *photo
+            name: photo
+            hint: Facultatif. Affichée à droite du texte sur ordinateur.
+      - name: body
+        label: Contenu de la page
+        hint: Le texte sous le bandeau. Inutilisé sur l'accueil et sur Réalisations.
+        widget: richtext
+        required: false
+
+singletons:
+  # --- Réglages généraux : src/data/site.yaml --------------------------------
+  - name: site
+    label: Réglages du site
+    icon: settings
+    file: /src/data/site.yaml
+    fields:
+      - name: nom
+        label: Nom
+        hint: Le nom de l'entreprise, repris dans le titre des pages et les mentions légales.
+      - name: logo
+        label: Logo
+        hint: Affiché en haut de toutes les pages.
+        widget: image
+        accept: image/*
+        media_folder: /public/images
+        public_folder: /images
+      - name: metier
+        label: Métier
+        hint: Par exemple « Rénovation et aménagement ».
+      - name: description
+        label: Résumé pour Google
+        hint: >-
+          Résumé du site affiché par Google. Idéalement entre 150 et 160
+          caractères.
+        widget: text
+      - name: zone
+        label: Zone d'intervention
+        hint: Par exemple « Angoulême et alentours ».
+      - <<: *photo
+        name: photoPartage
+        label: Photo de partage
+        hint: >-
+          Affichée quand un lien du site est partagé (WhatsApp, Facebook, SMS…).
+          Elle est recadrée au format paysage : choisissez une photo en largeur.
+        required: true
+      - name: formeJuridique
+        label: Forme juridique
+        hint: Par exemple « EURL ». Affichée dans le pied de page et les mentions légales.
+      - name: contact
+        label: Coordonnées
+        widget: object
+        fields:
+          - name: email
+            label: Adresse e-mail
+            pattern:
+              - '^[^@\s]+@[^@\s]+\.[^@\s]+$'
+              - 'Adresse e-mail invalide, par exemple contact@exemple.fr'
+          - name: telephone
+            label: Téléphone (pour le lien cliquable)
+            hint: >-
+              Format international, sans espace : +33 suivi du numéro sans le 0,
+              par exemple +33612345678
+            pattern:
+              - '^\+[0-9]{6,15}$'
+              - 'Écrivez +33 suivi du numéro sans le 0 initial, sans espace.'
+          - name: telephoneAffiche
+            label: Téléphone (tel qu'affiché)
+            hint: La façon dont le numéro s'affiche, par exemple 06 12 34 56 78
+          - name: adresse
+            label: Adresse
+            hint: >-
+              Sous la forme « rue, code postal ville », par exemple
+              17 rue Angel Albert, 16000 Angoulême. Google lit la ville et le
+              code postal après la virgule.
+            pattern:
+              - '^.+,\s*\d{5}\s+\S.*$'
+              - 'Écrivez la rue, une virgule, puis le code postal et la ville.'
+          - name: siret
+            label: SIRET
+            hint: Obligatoire, affiché sur la page des mentions légales.
+      - name: horaires
+        label: Horaires
+        label_singular: Plage horaire
+        hint: Une ligne par plage horaire, dans l'ordre d'affichage.
+        widget: list
+        min: 1
+        collapsed: true
+        summary: '{{jour}} : {{heures}}'
+        fields:
+          - name: jour
+            label: Jour(s)
+            hint: Par exemple « Lundi – Vendredi ».
+          - name: heures
+            label: Heures
+            hint: Par exemple « 8h00 – 18h00 » ou « Fermé ».
+      - name: reseaux
+        label: Réseaux sociaux
+        label_singular: Réseau
+        hint: Affichés dans le pied de page. La liste peut rester vide.
+        widget: list
+        required: false
+        collapsed: true
+        summary: '{{nom}}'
+        fields:
+          - name: nom
+            label: Nom du réseau
+            hint: Par exemple « Instagram ».
+          - name: url
+            label: Adresse du profil
+            pattern:
+              - '^https?://\S+$'
+              - "L'adresse doit commencer par https://"
+      - name: menu
+        label: Menu de navigation
+        label_singular: Entrée du menu
+        hint: >-
+          L'ordre des lignes est l'ordre d'affichage. Vous pouvez renommer ou
+          réordonner les entrées ; pour ajouter une page, il faut aussi modifier
+          le code : demandez-le.
+        widget: list
+        min: 1
+        collapsed: true
+        summary: '{{texte}}'
+        fields:
+          - name: texte
+            label: Texte affiché
+          - name: url
+            label: Adresse de la page
+            hint: Avec le « / » au début et à la fin, par exemple /contact/
+            pattern:
+              - '^/([a-z0-9-]+/)*$'
+              - 'Commencez et terminez par « / », sans accent ni espace, par exemple /contact/'
+      - name: ctaPrincipal
+        label: Bouton d'appel à l'action (en haut à droite)
+        widget: object
+        fields:
+          - name: texte
+            label: Texte du bouton
+          - name: url
+            label: Lien du bouton
+            hint: Adresse d'une page du site, par exemple /contact/
+
+  # --- Prestations : src/data/prestations.yaml -------------------------------
+  - name: prestations
+    label: Prestations
+    icon: handyman
+    file: /src/data/prestations.yaml
+    fields:
+      - name: prestations
+        label: Prestations
+        label_singular: Prestation
+        hint: >-
+          Alimente la page Prestations et l'aperçu de la page d'accueil. L'ordre
+          de la liste est l'ordre d'affichage.
+        widget: list
+        root: true
+        min: 1
+        collapsed: true
+        summary: '{{titre}}'
+        fields:
+          - name: id
+            label: Identifiant
+            hint: >-
+              Nom technique unique, en minuscules, sans accent ni espace, par
+              exemple pose-terrasse. Il n'est pas affiché sur le site.
+            pattern:
+              - '^[a-z0-9-]+$'
+              - 'Minuscules, chiffres et tirets uniquement, par exemple pose-terrasse'
+          - name: titre
+            label: Titre
+          - name: description
+            label: Description
+            widget: text
+          - <<: *photo
+            name: photo
+            hint: Facultatif. Affichée en haut de la carte de la prestation.
+          - name: tarif
+            label: Tarif
+            hint: Facultatif. Par exemple « Sur devis » ou « À partir de 450 € ».
+            required: false
+          - name: details
+            label: Points forts
+            label_singular: Point fort
+            hint: Facultatif. Une courte phrase par ligne.
+            widget: list
+            required: false
+
+  # --- Réalisations : src/data/realisations.yaml -----------------------------
+  - name: realisations
+    label: Réalisations
+    icon: photo_library
+    file: /src/data/realisations.yaml
+    fields:
+      - name: apercuAccueil
+        label: Bloc « Réalisations » de la page d'accueil
+        hint: Les textes autour de la mosaïque de photos.
+        widget: object
+        fields:
+          - name: surtitre
+            label: Surtitre
+          - name: titre
+            label: Titre
+          - name: bouton
+            label: Texte du bouton vers la page Réalisations
+      - name: categories
+        label: Catégories
+        label_singular: Catégorie
+        hint: >-
+          Les rubriques de la page Réalisations, dans l'ordre d'affichage. Avant
+          de supprimer une catégorie, changez la catégorie de ses photos.
+        widget: list
+        min: 1
+        collapsed: true
+        summary: '{{titre}}'
+        fields:
+          - name: id
+            label: Identifiant
+            hint: >-
+              Nom technique unique, en minuscules, sans accent ni espace, par
+              exemple exterieurs. C'est lui qu'on indique dans chaque photo.
+            pattern:
+              - '^[a-z0-9-]+$'
+              - 'Minuscules, chiffres et tirets uniquement, par exemple exterieurs'
+          - name: titre
+            label: Titre affiché
+      - name: photos
+        label: Photos
+        label_singular: Photo
+        hint: >-
+          Les photos de chantiers : page Réalisations et mosaïque de la page
+          d'accueil. Sur la page Réalisations, elles sont rangées par catégorie,
+          dans l'ordre de la liste.
+        widget: list
+        min: 1
+        collapsed: true
+        summary: '{{legende}}'
+        fields:
+          - <<: *photo
+            name: fichier
+            required: true
+          - name: legende
+            label: Légende
+            hint: Affichée sous la photo ; sert aussi de description pour les personnes malvoyantes.
+          - name: categorie
+            label: Catégorie
+            hint: >-
+              L'identifiant d'une des catégories ci-dessus, par exemple
+              exterieurs, interieurs ou renovation.
+          - name: etiquette
+            label: Pastille
+            hint: Facultatif. Petit mot posé sur la photo, par exemple « Avant ».
+            required: false
+          - name: accueil
+            label: Place dans la mosaïque de l'accueil
+            hint: >-
+              Facultatif : laissez vide pour ne pas la montrer sur l'accueil.
+              1 = grande photo en arche à gauche, 2 = large en haut au milieu,
+              3 = haute à droite, 4 et 5 = petites en bas au milieu. Une seule
+              photo par numéro.
+            widget: number
+            required: false
+            min: 1
+            max: 5
+            step: 1
+
+  # --- Avis clients : src/data/temoignages.yaml ------------------------------
+  - name: temoignages
+    label: Avis clients
+    icon: reviews
+    file: /src/data/temoignages.yaml
+    fields:
+      - name: temoignages
+        label: Avis clients
+        label_singular: Avis
+        hint: >-
+          Affichés sur la page d'accueil, dans l'ordre de la liste. Si la liste
+          est vide, la section disparaît.
+        widget: list
+        root: true
+        required: false
+        collapsed: true
+        summary: '{{auteur}}'
+        fields:
+          - name: id
+            label: Identifiant
+            hint: >-
+              Nom technique unique, en minuscules, sans accent ni espace, par
+              exemple claire-m. Il n'est pas affiché sur le site.
+            pattern:
+              - '^[a-z0-9-]+$'
+              - 'Minuscules, chiffres et tirets uniquement, par exemple claire-m'
+          - name: texte
+            label: Avis
+            widget: text
+          - name: auteur
+            label: Auteur
+            hint: Par exemple « Claire M. ».
+          - name: lieu
+            label: Ville
+            hint: Facultatif.
+            required: false
