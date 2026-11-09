@@ -109,10 +109,26 @@ Comportements de Sveltia CMS à connaître :
 Connexion : chaque personne qui édite a besoin d'un **compte GitHub** avec un
 accès en écriture au dépôt `tlenclos/evan-website` (_Settings → Collaborators_).
 Choix retenu : connexion par **jeton d'accès** uniquement (`auth_methods:
-[token]`), pour n'avoir rien à héberger. Le jeton est un _fine-grained token_
-GitHub limité à ce dépôt, avec le droit _Contents : Read and write_ ; le
-navigateur le garde, à refaire par appareil et à son expiration. Pour un bouton
-« Se connecter avec GitHub », il faudrait déployer
+[token]`), pour n'avoir rien à héberger. Le navigateur garde le jeton ; il est
+à recoller sur chaque appareil, et à refaire à son expiration.
+
+- Une personne **collaboratrice** (tout le monde sauf le propriétaire du dépôt)
+  doit créer un jeton **classique** avec le droit `repo` :
+  https://github.com/settings/tokens/new?scopes=repo&description=Site%20EB%20Concept.
+  Un _fine-grained token_ ne peut viser que les dépôts de son propre compte ou
+  d'une organisation, pas un dépôt personnel où l'on est seulement
+  collaborateur (limite documentée par GitHub). Or le lien proposé par la
+  fenêtre de connexion de Sveltia crée justement un _fine-grained token_ : les
+  collaborateurs doivent l'ignorer.
+- Le propriétaire du dépôt peut utiliser un _fine-grained token_ limité à ce
+  dépôt, avec le droit _Contents : Read and write_.
+
+Le guide pas à pas destiné aux personnes qui éditent (compte, invitation, jeton,
+captures de l'interface) est l'artifact
+https://claude.ai/artifact/TGPj4Gf9J4kmyHQfRFu9po, à mettre à jour si
+l'interface ou la marche à suivre change.
+
+Pour un bouton « Se connecter avec GitHub », il faudrait déployer
 [Sveltia CMS Authenticator](https://github.com/sveltia/sveltia-cms-auth) sur
 Cloudflare Workers, avec une application OAuth GitHub, puis renseigner
 `backend.base_url` et retirer `auth_methods` dans `config.yml`.
