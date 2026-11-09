@@ -25,8 +25,11 @@ Trois façons de faire une modification :
 
 ## L'interface d'édition
 
-1. Ouvrez **https://ebconceptetrenovation.fr/admin/** et connectez-vous avec
-   votre compte GitHub (il doit avoir été ajouté au dépôt du site).
+1. Ouvrez **https://ebconceptetrenovation.fr/admin/**, cliquez sur **Se
+   connecter avec un jeton d'accès** et collez votre clé d'accès GitHub. La
+   première fois, il faut un compte GitHub invité sur le dépôt et une clé à
+   créer : la marche à suivre, avec captures, est dans le guide que Thibault
+   vous a envoyé. Le navigateur s'en souvient ensuite.
 2. Dans le menu de gauche, choisissez ce que vous voulez modifier : **Pages**,
    **Réglages du site**, **Prestations**, **Réalisations** ou **Avis clients**.
    Les photos se gèrent depuis la **bibliothèque de médias**.
